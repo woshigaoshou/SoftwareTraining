@@ -31,4 +31,25 @@ const router = new VueRouter({
   mode: 'history'
 })
 
+router.beforeEach((to, from, next) => {
+  // console.log(to.path);
+  // console.log(next);
+
+  if (to.path === '/login') {
+    next();
+  }
+  else {
+    let token = localStorage.getItem('Authorization');
+    if (token === '' || token === null) {
+      alert("登录已失效，请重新登录！")
+      next('/login')
+    }
+    else {
+      next();
+    }
+  }
+
+
+})
+
 export default router

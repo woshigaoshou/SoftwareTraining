@@ -54,6 +54,16 @@ export default {
         method: "post"
       }).then(res => {
         console.log(res);
+        if (res.code !== 200) {
+          // console.log(res.message);
+          alert(res.message);
+          this.$router.push("/login");
+        } else {
+          this.userToken = "Bearer " + res.data.accessToken;
+          this.$store.commit("changeLogin", { Authorization: this.userToken });
+          alert("登录成功！");
+          this.$router.push("/index");
+        }
       });
     },
     register() {

@@ -10,15 +10,20 @@ export function request(config) {
     // console.log(config);
     // console.log('--------------');
     // console.log(config.data);
+    if (localStorage.getItem('Authorization')) {
+      config.headers.Authorization = localStorage.getItem('Authorization');
+    }
+    // console.log(config.headers.Authorization);
+    // console.log(config.headers);
     return config;
   }, err => {
-    console.log(err);
+    return Promise.reject(err);
   })
   instance.interceptors.response.use(res => {
     // console.log(res);
     return res.data;
   }, err => {
-    console.log(err);
+    // console.log(err);
   })
   return instance(config);
 }
