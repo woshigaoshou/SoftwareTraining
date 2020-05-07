@@ -69,6 +69,7 @@ export default {
             });
             this.$store.commit(SUBUSER, this.loginForm);
             alert("登录成功！");
+            console.log(res.message);
             this.$router.push("/index");
           }
         });
