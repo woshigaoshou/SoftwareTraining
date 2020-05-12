@@ -22,7 +22,7 @@
 
 <script>
 import { request } from "../../network/request/request";
-import { CHANGE_LOGIN, SUBUSER } from "../../store/mutation-types";
+import { CHANGE_LOGIN, SUBUSER, GET_USERID } from "../../store/mutation-types";
 
 export default {
   name: "login",
@@ -68,6 +68,7 @@ export default {
               Authorization: this.userToken
             });
             this.$store.commit(SUBUSER, this.loginForm);
+            this.$store.commit(GET_USERID, this.loginForm.userID);
             alert("登录成功！");
             console.log(res.message);
             this.$router.push("/index");

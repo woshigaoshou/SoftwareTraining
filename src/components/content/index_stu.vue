@@ -11,7 +11,7 @@
 <script>
 import Header from '../../components/common/header'
 import Left from '../../components/common/left'
-import Content from '../../components/common/content'
+import Content from '../../components/common/stu_index_content'
 export default {
   name:'index_stu',
   components:{

@@ -6,14 +6,14 @@ import {
     CHECK_TOKEN
 } from '../store/mutation-types'
 
-const index = () =>
-    import ("../components/content/index");
 const login = () =>
     import ("../components/common/login");
 const register = () =>
     import ("../components/common/register");
 const stu_index = () =>
     import ("components/content/index_stu")
+const test = () =>
+    import ("components/common/test")
 
 Vue.use(VueRouter)
 
@@ -32,6 +32,10 @@ const routes = [{
     {
         path: '/register',
         component: register
+    },
+    {
+        path: '/test',
+        component: test
     }
 ]
 
