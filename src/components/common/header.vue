@@ -20,7 +20,7 @@
                   我的<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                     <el-dropdown-menu slot="dropdown" class="dropdown-menu">
-                        <el-dropdown-item disabled>当前登录用户: {{ $store.state.loginForm.userID }}（学生）</el-dropdown-item>
+                        <el-dropdown-item disabled>当前登录用户: {{ userId }}（学生）</el-dropdown-item>
                         <el-dropdown-item>个人主页</el-dropdown-item>
                         <el-dropdown-item>我的消息</el-dropdown-item>
                         <el-dropdown-item><el-button @click="logout">退出账号</el-button></el-dropdown-item>
@@ -39,7 +39,8 @@ data() {
             return {
                 formInline: {
                     content: ''
-                }
+                },
+                userId:''
             }
         },
         methods: {
@@ -53,7 +54,8 @@ data() {
             }
         },
         created() {
-          console.log(this.$store.state.loginForm);
+        //   console.log(this.$store.state.loginForm);
+        this.userId = localStorage.getItem("USERID")
         }
 }
 </script>
