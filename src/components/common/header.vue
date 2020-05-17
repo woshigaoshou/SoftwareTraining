@@ -20,7 +20,15 @@
                   我的<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                     <el-dropdown-menu slot="dropdown" class="dropdown-menu">
-                        <el-dropdown-item disabled>当前登录用户: {{ userId }}（学生）</el-dropdown-item>
+                        <el-dropdown-item disabled>当前登录用户: {{ userName }}
+                            <template>
+                              <span v-if="identityId == 1">(学生)</span> 
+                              <span v-if="identityId == 2">(指导老师)</span>
+                              <span v-if="identityId == 3">(二级学院管理员)</span>
+                              <span v-if="identityId == 4">(大创管理者)</span>
+                              <span v-if="identityId == 5">(评审专家)</span>
+                            </template>
+                        </el-dropdown-item>
                         <el-dropdown-item>个人主页</el-dropdown-item>
                         <el-dropdown-item>我的消息</el-dropdown-item>
                         <el-dropdown-item><el-button @click="logout">退出账号</el-button></el-dropdown-item>
@@ -34,14 +42,22 @@
 
 <script>
 import { CHANGE_LOGOUT } from "../../store/mutation-types";
+import {request} from '../../network/request/request'
 export default {
 data() {
             return {
                 formInline: {
                     content: ''
                 },
-                userId:''
+                userId:'',
+                userName:'',
+                identityId:''
             }
+        },
+        created() {
+        //   console.log(this.$store.state.loginForm);
+        this.userId = localStorage.getItem("USERID")
+        this.initUserInfo();
         },
         methods: {
             onSubmit() {
@@ -51,12 +67,19 @@ data() {
                 // console.log(this.$store.state.loginForm.userID);
                 this.$store.commit(CHANGE_LOGOUT);
                 this.$router.push("/login");
+            },
+            initUserInfo() {
+                request({
+                    url:'http://47.113.80.250:9003/user/select/' + this.userId,
+                    method:'get'
+                  }).then(res => {
+                        this.userName = res.data.user.userName; 
+                        this.identityId = res.data.user.identityId
+                        console.log(res);
+                    })
             }
-        },
-        created() {
-        //   console.log(this.$store.state.loginForm);
-        this.userId = localStorage.getItem("USERID")
         }
+        
 }
 </script>
 
