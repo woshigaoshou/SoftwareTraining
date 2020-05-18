@@ -29,9 +29,9 @@
     data() {
       return {
         navData: [ 
-          { num: 1 , name: "首页", icon: 'el-icon-house' , evens: [ { name:'我的项目', path: '/' },{name:'中期评定',path:'/midAssess'} ] },
+          { num: 1 , name: "首页", icon: 'el-icon-house' , evens: [ { name:'我的项目', path: '/' }] },
            { num: 2 , name: "新建", icon: 'el-icon-circle-plus-outline' , evens: [ { name:'新建项目', path: 'AddProject' } ] },
-          { num: 3 , name: "系统设置", icon: 'el-icon-folder-checked' , evens: [ { name:'修改密码', path: 'ModificationPassword' } ] }
+          
            ],
         bread : [
           { name: '首页', path: '/' }

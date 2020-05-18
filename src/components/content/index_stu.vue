@@ -2,7 +2,7 @@
 <div>
 <Header></Header>
 <Left></Left>
-<Content></Content>
+<!-- <router-view></router-view> -->
 </div>
     
     
@@ -11,13 +11,11 @@
 <script>
 import Header from '../../components/common/header'
 import Left from '../../components/common/left'
-import Content from '../../components/common/stu_index_content'
 export default {
   name:'index_stu',
   components:{
     Header,
-    Left,
-    Content
+    Left
   }
 }
 </script>

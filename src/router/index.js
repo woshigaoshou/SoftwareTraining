@@ -12,8 +12,8 @@ const register = () =>
     import ("../components/common/register");
 const stu_index = () =>
     import ("components/content/index_stu")
-const test = () =>
-    import ("components/common/test")
+const stu_index_content = () =>
+    import ("components/content/stu_index_content")
 
 Vue.use(VueRouter)
 
@@ -23,7 +23,11 @@ const routes = [{
     },
     {
         path: '/index',
-        component: stu_index
+        component: stu_index,
+        children: [{
+            path: '/index',
+            component: stu_index_content
+        }]
     },
     {
         path: '/login',
@@ -32,10 +36,6 @@ const routes = [{
     {
         path: '/register',
         component: register
-    },
-    {
-        path: '/test',
-        component: test
     }
 ]
 
