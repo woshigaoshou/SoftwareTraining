@@ -133,7 +133,7 @@
       class="midReport"
      title="中期报告详情">
     <template>
-      <el-form class="mReportForm" :model="midReport" >
+      <el-form class="mReportForm" :model="midReport">
             <el-form-item label="项目名称:" label-width="100px">
              <span>{{projectName}}</span>
           </el-form-item>
@@ -183,13 +183,15 @@
            <el-form-item label="评审专家评语:" label-width="100px">
              <span>{{midReport.ecomment}}</span>
           </el-form-item>
-          <el-form-item label="上传文件:" label-width="100px" enctype="multipart/form-data">
+          <el-form-item label="上传文件:" label-width="100px" enctype="multipart/form-data" style="margin:0">
              <el-upload
               class="upload-demo"
               ref="upload"
               action
+              multiple
               :limit="1"
-              :before-upload="beforeUpload"
+              :http-request="beforeUpload"
+              :show-file-list="false"
               >
               <el-button slot="trigger" size="mini" type="primary">选取文件</el-button>
               <div slot="tip" class="el-upload__tip" style="margin:0">文件不超过5MB</div>
@@ -212,7 +214,7 @@
                     label="操作"
                     > 
                     <template slot-scope="scope">
-                    <el-link :href="'http://47.113.80.250:8012/onlinePreview?url='+scope.row.furl">
+                    <el-link tag="a" target="_blank" :href="'http://47.113.80.250:8012/onlinePreview?url='+scope.row.furl">
                     <el-button size="mini" type="primary">预览</el-button>
                     </el-link>
                     <el-link :href="scope.row.furl" style="margin-left:10px">
@@ -265,10 +267,7 @@ export default {
       changeContentValue:false,
       fileShow:false,
       mfileNewName:'',
-      mfileNewForm:{
-        file:'',
-        reportId:''
-      }
+      mfileForm:new FormData()
     }
   },
   created() {
@@ -414,31 +413,47 @@ export default {
 
     //中期报告文件上传
     //(1)上传前检验
-    beforeUpload(file) {
-      console.log(file);
-      this.mfileNewForm.file = file;
-      this.mfileNewForm.reportId = this.midReport.reportId;
+    beforeUpload(val) {
+      console.log(val);
+      let fileForm = new FormData();
+      console.log(fileForm);
+      
+      fileForm.append('file',val.file);
+      fileForm.append('reportId',this.midReport.reportId);
+      this.mfileForm = fileForm;
+      console.log(this.mfileNewForm);
       //下方显示文件名
       this.fileShow = true;
-      this.mfileNewName = file.name;
+      this.mfileNewName = val.file.name;
       //限制文件大小不超过5m
-      const isLt5M = file.size / 1024 / 1024 < 5;
+      const isLt5M = val.file.size / 1024 / 1024 < 5;
       if (!isLt5M) {
         this.$message.error("上传文件大小不能超过 5MB!");
       }
       return isLt5M;
     },
+  //(2)提交文件
     submitUpload() {
      console.log(this.mfileNewForm);
+     if(this.fileShow !== true) {
+       alert('请选择上传文件！')
+     }else {
     request ({
       url:'http://47.113.80.250:9003/report/student/file/insert/one',
-      headers:{'Content-Type':'multipart/form-data'},
-      data:this.mfileNewForm,
+      data:this.mfileForm,
       method:'POST'
     }).then(res => {
-      console.log(res);
-      
+      if(res.code === 200) {
+        alert(res.message)
+        this.$router.go(0)
+      }else {
+        throw err
+      }
+    }).catch(err => {
+      alert(err)
     })
+    }
+    
     }
   }
 }
