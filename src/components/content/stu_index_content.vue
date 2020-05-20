@@ -86,9 +86,10 @@
               </template>
           </el-table-column>
           </template>
-          <el-table-column label="操作" width="150">
+          <el-table-column label="中期报告操作" width="150">
             <template slot-scope="scope">
-              <el-button type="primary" size="small" @click="mReport(scope.$index, scope.row)">查看中期报告</el-button>
+              <el-button type="primary" size="small" @click="mReport(scope.$index, scope.row)">查看</el-button>
+              <el-button type="primary" size="small" @click="mReportNew(scope.$index, scope.row)">新建</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -103,6 +104,29 @@
             </el-pagination>
        </div>
 
+    <el-dialog
+      v-model="dialogFormVisibleNew"
+     :visible.sync="dialogFormVisibleNew"
+      class="midReport"
+     title="新建中期报告">
+     <el-form class="mReportForm">
+       <el-form-item label="项目名称:" label-width="100px" >
+             <span>{{midReportNew.projectName}}</span>
+      </el-form-item>
+      <el-form-item label="项目编号:" label-width="100px">
+             <span>{{midReportNew.projectId}}</span>
+      </el-form-item>
+      <el-form-item label="学生学号" label-width="100px">
+             <span>{{midReportNew.userId}}</span>
+      </el-form-item>
+      <el-form-item label="中期报告简介" label-width="100px">
+            <el-input v-model="midReportNew.content"></el-input>
+      </el-form-item>
+     </el-form>
+     <div slot="footer" class="dialog-footer">
+        <el-button @click="submitMreport" type="primary">新建</el-button>
+      </div>
+    </el-dialog>
      <el-dialog
       v-model="dialogFormVisible"
      :visible.sync="dialogFormVisible"
@@ -159,6 +183,20 @@
            <el-form-item label="评审专家评语:" label-width="100px">
              <span>{{midReport.ecomment}}</span>
           </el-form-item>
+          <el-form-item label="上传文件:" label-width="100px" enctype="multipart/form-data">
+             <el-upload
+              class="upload-demo"
+              ref="upload"
+              action
+              :limit="1"
+              :before-upload="beforeUpload"
+              >
+              <el-button slot="trigger" size="mini" type="primary">选取文件</el-button>
+              <div slot="tip" class="el-upload__tip" style="margin:0">文件不超过5MB</div>
+              <el-button type="primary" size="mini" style="margin-left:10px" @click="submitUpload()">上传</el-button>
+              <p v-if="fileShow === true" style="font-size:12px;color:#ccc;margin:0">{{ mfileNewName }}</p>   
+              </el-upload> 
+          </el-form-item>
           <el-form-item label="文件列表:" label-width="100px" style="width:90%">
              <el-table
                   :data="mfiles"
@@ -207,23 +245,30 @@
 
 <script>
 import { request } from "../../network/request/request";
-
 export default {
   data() {
     return {
       tableData:[],
       userId : '',
       dialogFormVisible:false,
+      dialogFormVisibleNew:false,
       baseUrl:'',
       userInfo:[], 
       count:0, 
       limit:5,
       currentPage: 1,
       midReport:[],
+      midReportNew:[],
       projectName:'',
       mfiles:[],
       content:'',
-      changeContentValue:false
+      changeContentValue:false,
+      fileShow:false,
+      mfileNewName:'',
+      mfileNewForm:{
+        file:'',
+        reportId:''
+      }
     }
   },
   created() {
@@ -282,18 +327,61 @@ export default {
         url:'http://47.113.80.250:9003/report/select/' + row.projectId,
         method:'get'
       }).then(res => {
-        if(res.code !== 200){
-          alert('该项目未提交中期报告')
-        }
-        this.projectName = row.projectName;
+        // console.log(res);
+        if(res.code === 200){
+         this.projectName = row.projectName;
         this.midReport = res.data.mreport;
         this.mfiles = res.data.mfiles;
         this.content = res.data.mreport.content;
-        console.log(res);
+        return res.code
+        }else {
+          alert(res.message)
+        }
+        // console.log(this.midReport);
         }).then(res => {
-          this.dialogFormVisible = true
+          // if(res.code == 200)
+          if(res === 200) {
+            this.dialogFormVisible = true
+          }
+         
         })
     },
+
+  //新建中期报告
+  mReportNew(index,row){
+    console.log(row);
+    if(row.mreport === 1) {
+      alert('您已建立了中期报告，请查看并修改');
+    }
+    else if(row.mreport === 0) {
+    this.midReportNew.projectId =row.projectId;
+    this.midReportNew.projectName = row.projectName;
+    this.midReportNew.userId = row.userId;
+    this.dialogFormVisibleNew = true
+    }
+  },
+  //中期报告上传
+  submitMreport() {
+      request({
+          url:'http://47.113.80.250:9003/report/student/insert',
+          data:{
+            content:this.midReportNew.content,
+            projectId:this.midReportNew.projectId,
+            userId:this.midReportNew.userId
+          },
+          method:'POST'
+        }).then(res => {
+          console.log(res);
+          
+          if(res.code === 200) {
+            alert('新建成功！');
+            this.dialogFormVisibleNew = false;
+            this.$router.go(0)
+          } else {
+            alert(res.message)
+          }
+   })
+  },
 
     //删除中期报告文件
     deleteFile(index,row) {
@@ -322,6 +410,35 @@ export default {
         alert('修改简介成功！')
         this.changeContentValue = false;
       })
+    },
+
+    //中期报告文件上传
+    //(1)上传前检验
+    beforeUpload(file) {
+      console.log(file);
+      this.mfileNewForm.file = file;
+      this.mfileNewForm.reportId = this.midReport.reportId;
+      //下方显示文件名
+      this.fileShow = true;
+      this.mfileNewName = file.name;
+      //限制文件大小不超过5m
+      const isLt5M = file.size / 1024 / 1024 < 5;
+      if (!isLt5M) {
+        this.$message.error("上传文件大小不能超过 5MB!");
+      }
+      return isLt5M;
+    },
+    submitUpload() {
+     console.log(this.mfileNewForm);
+    request ({
+      url:'http://47.113.80.250:9003/report/student/file/insert/one',
+      headers:{'Content-Type':'multipart/form-data'},
+      data:this.mfileNewForm,
+      method:'POST'
+    }).then(res => {
+      console.log(res);
+      
+    })
     }
   }
 }
