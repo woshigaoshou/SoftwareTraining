@@ -6,13 +6,11 @@
 
 <script>
 import login from "./components/common/login";
-import register from "./components/common/register";
 
 export default {
   name: "App",
   components: {
-    login,
-    register
+    login
   }
 };
 </script>
