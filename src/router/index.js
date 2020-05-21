@@ -6,6 +6,7 @@ import {
   CHECK_TOKEN
 } from '../store/mutation-types'
 
+
 const login = () => import("../components/common/login");
 const stu_index = () => import("components/content/index_stu")
 const stu_index_content = () => import("components/content/stu_index_content")
@@ -18,9 +19,11 @@ const expertContent = () => import("../components/content/expertContent")
 const collegeAdminContent = () => import("../components/content/collegeAdminContent")
 
 
+
 Vue.use(VueRouter)
 
 const routes = [{
+
   path: '/',
   redirect: '/login'
 },

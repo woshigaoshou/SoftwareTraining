@@ -4,7 +4,9 @@
       <div class="header-title" onclick="window.location.href = 'index.html'">
         <strong>大创中期检查系统</strong>
       </div>
+
       <div class="header-search" v-show="isShow">
+
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
           <el-form-item>
             <el-input v-model="formInline.content" placeholder="查询内容"></el-input>
@@ -40,15 +42,19 @@
         </el-dropdown>
       </div>
     </header>
+
     <find v-show="showFind" class="find"></find>
     <div class="login-bg" v-show="showFind"></div>
+
   </div>
 </template>
 
 <script>
 import { CHANGE_LOGOUT } from "../../store/mutation-types";
 import { request } from "../../network/request/request";
+
 import find from "./find";
+
 
 export default {
   data() {
@@ -58,6 +64,7 @@ export default {
       },
       userId: "",
       userName: "",
+
       identityId: "",
       showFind: false
     };
@@ -71,11 +78,13 @@ export default {
   components: {
     find
   },
+
   created() {
     //   console.log(this.$store.state.loginForm);
     this.userId = localStorage.getItem("USERID");
     this.initUserInfo();
   },
+
   mounted() {
     this.$bus.$on("close", () => {
       this.showFind = false;
@@ -88,6 +97,7 @@ export default {
 
       // this.$bus.$emit("find", this.formInline.content);
       this.showFind = true;
+
     },
     logout() {
       // console.log(this.$store.state.loginForm.userID);
@@ -159,6 +169,7 @@ header {
   font-size: 24px;
   line-height: 70px;
 }
+
 .find {
   position: absolute;
   top: -75px;
@@ -185,4 +196,5 @@ header {
   background: rgba(0, 0, 0, 0.6);
   z-index: 999;
 }
+
 </style>
