@@ -4,7 +4,7 @@
       <div class="header-title" onclick="window.location.href = 'index.html'">
         <strong>大创中期检查系统</strong>
       </div>
-      <div class="header-search">
+      <div class="header-search" v-show="isShow">
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
           <el-form-item>
             <el-input v-model="formInline.content" placeholder="查询内容"></el-input>
@@ -56,6 +56,12 @@ export default {
       userName: "",
       identityId: ""
     };
+  },
+  props: {
+    isShow: {
+      type: Boolean,
+      default: true
+    }
   },
   created() {
     //   console.log(this.$store.state.loginForm);

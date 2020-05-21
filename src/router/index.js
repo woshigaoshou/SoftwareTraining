@@ -9,10 +9,11 @@ import {
 const login = () => import("../components/common/login");
 const stu_index = () => import("components/content/index_stu")
 const stu_index_content = () => import("components/content/stu_index_content")
-const Teacher = () => import("../views/Teacher")
-const CollegeAdmin = () => import("../views/collegeAdmin")
-const Admin = () => import("../views/admin")
-const Expert = () => import("../views/expert")
+const Teacher = () => import("../views/Teacher/Teacher")
+const CollegeAdmin = () => import("../views/CollegeAdmin/collegeAdmin")
+const Admin = () => import("../views/Admin/admin")
+const Expert = () => import("../views/Expert/expert")
+const teacherContent = () => import("../components/content/teacherContent")
 
 Vue.use(VueRouter)
 
@@ -34,7 +35,11 @@ const routes = [{
 },
 {
   path: '/Teacher',
-  component: Teacher
+  component: Teacher,
+  children: [{
+    path: '/teacherContent',
+    component: teacherContent
+  }]
 },
 {
   path: '/CollegeAdmin',

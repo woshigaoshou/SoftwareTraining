@@ -149,8 +149,8 @@ export default {
         })
     },
     handleMange(index, row) {
-        console.log(index);
-        console.log(row);
+        // console.log(index);
+        // console.log(row);
         
         this.dialogFormVisible = true;
     }

@@ -70,7 +70,11 @@
       <el-table-column label="中期报告操作" width="150">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="mReport(scope.$index, scope.row)">查看</el-button>
-          <el-button type="primary" size="small" @click="mReportNew(scope.$index, scope.row)">新建</el-button>
+          <el-button
+            type="primary"
+            size="small"
+            @click="mReportApproval(scope.$index, scope.row)"
+          >审核</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -89,7 +93,7 @@
       v-model="dialogFormVisibleNew"
       :visible.sync="dialogFormVisibleNew"
       class="midReport"
-      title="新建中期报告"
+      title="审核中期报告"
     >
       <el-form class="mReportForm">
         <el-form-item label="项目名称:" label-width="100px">
@@ -101,12 +105,14 @@
         <el-form-item label="学生学号" label-width="100px">
           <span>{{midReportNew.userId}}</span>
         </el-form-item>
-        <el-form-item label="中期报告简介" label-width="100px">
-          <el-input v-model="midReportNew.content"></el-input>
+        <el-form-item label="评语" label-width="100px">
+          <el-input v-model="comment"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="submitMreport" type="primary">新建</el-button>
+        <el-button @click="pass" type="primary">通过</el-button>
+        <el-button @click="noPass" type="primary">不通过</el-button>
+        <el-button @click="Back" type="primary">退回修改</el-button>
       </div>
     </el-dialog>
     <el-dialog
@@ -123,7 +129,6 @@
           <el-form-item label="中期报告简介:" label-width="100px">
             <span v-if="changeContentValue == false">
               <span>{{content}}</span>
-              <a href="javascript:;" @click="changeContentValue = true" class="changeContent">修改</a>
             </span>
             <el-form class="contentForm" v-else>
               <el-input v-model="content"></el-input>
@@ -166,35 +171,6 @@
           <el-form-item label="评审专家评语:" label-width="100px">
             <span>{{midReport.ecomment}}</span>
           </el-form-item>
-          <el-form-item
-            label="上传文件:"
-            label-width="100px"
-            enctype="multipart/form-data"
-            style="margin:0"
-          >
-            <el-upload
-              class="upload-demo"
-              ref="upload"
-              action
-              multiple
-              :limit="1"
-              :http-request="beforeUpload"
-              :show-file-list="false"
-            >
-              <el-button slot="trigger" size="mini" type="primary">选取文件</el-button>
-              <div slot="tip" class="el-upload__tip" style="margin:0">文件不超过5MB</div>
-              <el-button
-                type="primary"
-                size="mini"
-                style="margin-left:10px"
-                @click="submitUpload()"
-              >上传</el-button>
-              <p
-                v-if="fileShow === true"
-                style="font-size:12px;color:#ccc;margin:0"
-              >{{ mfileNewName }}</p>
-            </el-upload>
-          </el-form-item>
           <el-form-item label="文件列表:" label-width="100px" style="width:90%">
             <el-table :data="mfiles" height="250" border style="width: 100%;font-size:12px">
               <el-table-column prop="fname" label="文件名" width="210"></el-table-column>
@@ -210,16 +186,6 @@
                   <el-link :href="scope.row.furl" style="margin-left:10px">
                     <el-button type="primary" size="mini">下载</el-button>
                   </el-link>
-                  <el-popconfirm
-                    confirmButtonText="确认"
-                    cancelButtonText="不了"
-                    icon="el-icon-info"
-                    title="确定删除该文件吗？"
-                    style="margin-left:10px;"
-                    @onConfirm="deleteFile(scope.$index,scope.row)"
-                  >
-                    <el-button slot="reference" size="mini" type="danger">删除</el-button>
-                  </el-popconfirm>
                 </template>
               </el-table-column>
             </el-table>
@@ -235,6 +201,9 @@
 
 <script>
 import { request } from "../../network/request/request";
+import { getmReport } from "../../network/request/getmReport";
+import { mReportApproval } from "../../network/request/mReportApproval";
+
 export default {
   data() {
     return {
@@ -255,7 +224,10 @@ export default {
       changeContentValue: false,
       fileShow: false,
       mfileNewName: "",
-      mfileForm: new FormData()
+      mfileForm: new FormData(),
+      //分隔
+      comment: "",
+      row: {}
     };
   },
   created() {
@@ -334,39 +306,61 @@ export default {
           }
         });
     },
+    //认可 中期报告
+    mReportApproval(index, row) {
+      // console.log("点击认可");
+      // getmReport().then(res => {
+      //   console.log(res);
+      // });
+      this.row = row;
 
-    //新建中期报告
-    mReportNew(index, row) {
-      console.log(row);
       if (row.mreport === 1) {
-        alert("您已建立了中期报告，请查看并修改");
-      } else if (row.mreport === 0) {
+        //操作
         this.midReportNew.projectId = row.projectId;
         this.midReportNew.projectName = row.projectName;
         this.midReportNew.userId = row.userId;
         this.dialogFormVisibleNew = true;
+
+        // mReportApproval("teacher", {
+        //   approval: 2,
+        //   // comment: this.comment,
+        //   comment: "老师认可测试",
+        //   reportId: row.projectId
+        // }).then(res => {
+        //   console.log(res);
+        // });
+      } else if (row.mreport === 0) {
+        alert("该报告未提交，无法审核！");
       }
     },
-    //中期报告上传
-    submitMreport() {
-      request({
-        url: "http://47.113.80.250:9003/report/student/insert",
-        data: {
-          content: this.midReportNew.content,
-          projectId: this.midReportNew.projectId,
-          userId: this.midReportNew.userId
-        },
-        method: "POST"
+    pass() {
+      mReportApproval("teacher", {
+        approval: 2,
+        comment: this.comment,
+        reportId: this.row.projectId
       }).then(res => {
-        console.log(res);
-
-        if (res.code === 200) {
-          alert("新建成功！");
-          this.dialogFormVisibleNew = false;
-          this.$router.go(0);
-        } else {
-          alert(res.message);
-        }
+        // console.log(res);
+        this.dialogFormVisibleNew = false;
+      });
+    },
+    noPass() {
+      mReportApproval("teacher", {
+        approval: 1,
+        comment: this.comment,
+        reportId: this.row.projectId
+      }).then(res => {
+        // console.log(res);
+        this.dialogFormVisibleNew = false;
+      });
+    },
+    Back() {
+      mReportApproval("teacher", {
+        approval: 3,
+        comment: this.comment,
+        reportId: this.row.projectId
+      }).then(res => {
+        // console.log(res);
+        this.dialogFormVisibleNew = false;
       });
     },
 
