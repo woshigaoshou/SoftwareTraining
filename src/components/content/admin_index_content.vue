@@ -63,7 +63,7 @@
           </el-table-column>
           <el-table-column
             label="项目负责人学号"
-            width="150"
+            width="140"
             prop="userId"
             >
           </el-table-column>
@@ -94,13 +94,16 @@
               </template>
           </el-table-column>
           </template>
-          <el-table-column label="中期报告操作" width="150">
+          <el-table-column label="中期报告操作">
             <template slot-scope="scope">
               <el-button type="primary" size="small" @click="mReport(scope.$index, scope.row)">查看</el-button>
               <el-button type="primary" size="small" @click="mReportNew(scope.$index, scope.row)">新建</el-button>
             </template>
           </el-table-column>
         </el-table>
+        <div class="sumReport">
+          <el-button type="primary" size="mini" @click="sumReport">汇总报表</el-button>
+        </div>
         <div class="block">
             <el-pagination
               @size-change="handleSizeChange"
@@ -260,6 +263,7 @@
 
 <script>
 import { request } from "../../network/request/request";
+//  var fileDownload = require('js-file-download')
 export default {
   data() {
     return {
@@ -304,7 +308,7 @@ export default {
         method:'get'
       }).then(res => {
         this.tableData =[];
-        console.log(res);
+        // console.log(res);
         res.data.forEach(item => {
         this.tableData.push(item) ;
         })
@@ -318,7 +322,7 @@ export default {
 
     //获取所属二级学院名称
     GetCollegeName(row) {
-      console.log(row.collegeId);
+      // console.log(row.collegeId);
       
       for(let i in this.collegeList) {
         if(row.collegeId === this.collegeList[i].id)
@@ -506,9 +510,31 @@ export default {
     }).catch(err => {
       alert(err)
     })
-    }
-    
-    }
+     }
+    },
+    //汇总中期报告
+  sumReport() {
+    request({
+      url:'http://47.113.80.250:9003/report/admin/excel',
+      method:'POST',
+       responseType: 'blob',
+         headers: {
+       'Content-Type': 'application/json'
+     }
+    }).then(res => {
+      const content = res;
+      const blob = new Blob([content],{type:'application/ms-excel'});
+     const fileName = '中期报告汇总表.xlsx';//下载文件名称
+     const elink = document.createElement('a');
+     elink.download = fileName;
+    //  elink.style.display = 'none';
+     elink.href = URL.createObjectURL(blob);
+     document.body.appendChild(elink);
+     elink.click();
+     URL.revokeObjectURL(elink.href); // 释放URL 对象
+     document.body.removeChild(elink);
+    })
+  }
   }
 }
 </script>
@@ -605,5 +631,17 @@ export default {
   }
   .el-col-20 {
     width: 74.1%;
+  }
+  .block .el-pagination {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .sumReport {
+    position: absolute;
+    right: 325px;
+    bottom: 10px;
+  }
+  .sumReport .el-button {
+    height: 32px;
   }
 </style>

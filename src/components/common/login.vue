@@ -33,7 +33,8 @@ export default {
         userPsw: "",
         randString: ""
       },
-      imgsrc: this.createImg()
+      imgsrc: this.createImg(),
+      identity_ids: ["/index", "/Teacher", "/CollegeAdmin", "/Admin", "/Expert"]
     };
   },
   methods: {
@@ -70,8 +71,9 @@ export default {
             this.$store.commit(SUBUSER, this.loginForm);
             this.$store.commit(GET_USERID, this.loginForm.userID);
             alert("登录成功！");
-            console.log(res.message);
-            this.$router.push("/index");
+            // console.log(res.message);
+            let id = res.data.identityId;
+            this.$router.push(this.identity_ids[id - 1]);
           }
         });
       }

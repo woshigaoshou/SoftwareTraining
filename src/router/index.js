@@ -8,12 +8,20 @@ import {
 
 const login = () =>
     import ("../components/common/login");
-const register = () =>
-    import ("../components/common/register");
-const stu_index = () =>
-    import ("components/content/index_stu")
+const student = () =>
+    import ("../views/student")
 const stu_index_content = () =>
     import ("components/content/stu_index_content")
+const Teacher = () =>
+    import ("../views/Teacher")
+const CollegeAdmin = () =>
+    import ("../views/collegeAdmin")
+const Admin = () =>
+    import ("../views/admin")
+const admin_content = () =>
+    import ("../components/content/admin_index_content")
+const Expert = () =>
+    import ("../views/expert")
 
 Vue.use(VueRouter)
 
@@ -23,7 +31,7 @@ const routes = [{
     },
     {
         path: '/index',
-        component: stu_index,
+        component: student,
         children: [{
             path: '/index',
             component: stu_index_content
@@ -34,9 +42,25 @@ const routes = [{
         component: login
     },
     {
-        path: '/register',
-        component: register
-    }
+        path: '/Teacher',
+        component: Teacher
+    },
+    {
+        path: '/CollegeAdmin',
+        component: CollegeAdmin
+    },
+    {
+        path: '/Admin',
+        component: Admin,
+        children: [{
+            path: '/Admin/index',
+            component: admin_content
+        }]
+    },
+    {
+        path: '/Expert',
+        component: Expert
+    },
 ]
 
 const router = new VueRouter({
