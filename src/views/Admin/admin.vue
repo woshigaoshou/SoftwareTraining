@@ -1,11 +1,20 @@
 <template>
   <div>
-    <h2>admin</h2>
+    <Header></Header>
+    <Left></Left>
   </div>
 </template>
 
 <script>
-export default {};
+import Header from "../../components/common/header";
+import Left from "../../components/common/leftAdmin";
+export default {
+  name: "admin",
+  components: {
+    Header,
+    Left
+  }
+};
 </script>
 <style>
 </style>
