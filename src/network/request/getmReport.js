@@ -5,3 +5,11 @@ export function getmReport() {
     url: "/project/select/" + localStorage.getItem('USERID')
   })
 }
+
+export function findmReport(data) {
+  return request3({
+    url: "/report/select",
+    data,
+    method: 'post'
+  })
+}

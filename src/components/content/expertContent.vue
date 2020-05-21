@@ -112,7 +112,7 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="pass" type="primary">通过</el-button>
         <el-button @click="noPass" type="primary">不通过</el-button>
-        <el-button @click="Back" type="primary">退回修改</el-button>
+        <el-button @click="Back" type="primary">暂缓通过</el-button>
       </div>
     </el-dialog>
     <el-dialog
@@ -334,7 +334,7 @@ export default {
       }
     },
     pass() {
-      mReportApproval("teacher", {
+      mReportApproval("expert", {
         approval: 2,
         comment: this.comment,
         reportId: this.row.projectId
@@ -344,7 +344,7 @@ export default {
       });
     },
     noPass() {
-      mReportApproval("teacher", {
+      mReportApproval("expert", {
         approval: 1,
         comment: this.comment,
         reportId: this.row.projectId
@@ -354,7 +354,7 @@ export default {
       });
     },
     Back() {
-      mReportApproval("teacher", {
+      mReportApproval("expert", {
         approval: 3,
         comment: this.comment,
         reportId: this.row.projectId

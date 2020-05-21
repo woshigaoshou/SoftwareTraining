@@ -40,12 +40,16 @@
         </el-dropdown>
       </div>
     </header>
+    <find v-show="showFind" class="find"></find>
+    <div class="login-bg" v-show="showFind"></div>
   </div>
 </template>
 
 <script>
 import { CHANGE_LOGOUT } from "../../store/mutation-types";
 import { request } from "../../network/request/request";
+import find from "./find";
+
 export default {
   data() {
     return {
@@ -54,7 +58,8 @@ export default {
       },
       userId: "",
       userName: "",
-      identityId: ""
+      identityId: "",
+      showFind: false
     };
   },
   props: {
@@ -63,14 +68,26 @@ export default {
       default: true
     }
   },
+  components: {
+    find
+  },
   created() {
     //   console.log(this.$store.state.loginForm);
     this.userId = localStorage.getItem("USERID");
     this.initUserInfo();
   },
+  mounted() {
+    this.$bus.$on("close", () => {
+      this.showFind = false;
+    });
+  },
   methods: {
     onSubmit() {
-      // console.log('submit!');
+      // console.log("submit!");
+      // console.log(this.formInline.content);
+
+      // this.$bus.$emit("find", this.formInline.content);
+      this.showFind = true;
     },
     logout() {
       // console.log(this.$store.state.loginForm.userID);
@@ -141,5 +158,31 @@ header {
   position: absolute;
   font-size: 24px;
   line-height: 70px;
+}
+.find {
+  position: absolute;
+  top: -75px;
+  left: 20px;
+
+  z-index: 9999;
+}
+.find form {
+  width: 400px !important;
+  position: relative;
+  padding: 30px;
+  padding-left: 15px;
+  background-color: rgb(163, 207, 218);
+  z-index: 9999;
+  border-radius: 15px;
+}
+.login-bg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 999;
 }
 </style>

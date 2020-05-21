@@ -282,14 +282,14 @@ export default {
     //点击拓展按钮显示拓展表格
     handleMange(index, row) {
       // console.log(index);
-      // console.log(row);
+      console.log(row);
       request({
         url: "http://47.113.80.250:9003/user/select/" + row[0].userId,
         method: "get"
       }).then(res => {
         this.userInfo = [];
         this.userInfo = row;
-        console.log(res);
+        // console.log(res);
         this.userInfo.userCollege = res.data.college.collegeName;
         this.userInfo.userName = res.data.user.userName;
         this.userInfo.userPhone = res.data.user.phone;

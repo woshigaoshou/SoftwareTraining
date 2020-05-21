@@ -1,11 +1,22 @@
 <template>
   <div>
-    <h2>expert</h2>
+    <Header :isShow="false"></Header>
+    <Left></Left>
   </div>
 </template>
 
 <script>
-export default {};
+import Header from "../../components/common/header";
+import Left from "../../components/common/leftExpert";
+
+export default {
+  name: "Teacher",
+  components: {
+    Header,
+    Left
+  },
+  methods: {}
+};
 </script>
 <style>
 </style>

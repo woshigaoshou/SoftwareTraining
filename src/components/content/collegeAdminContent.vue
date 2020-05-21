@@ -112,7 +112,7 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="pass" type="primary">通过</el-button>
         <el-button @click="noPass" type="primary">不通过</el-button>
-        <el-button @click="Back" type="primary">退回修改</el-button>
+        <el-button @click="Back" type="primary">暂缓通过</el-button>
       </div>
     </el-dialog>
     <el-dialog
@@ -201,7 +201,7 @@
 
 <script>
 import { request } from "../../network/request/request";
-import { getmReport } from "../../network/request/getmReport";
+import { getmReport, findmReport } from "../../network/request/getmReport";
 import { mReportApproval } from "../../network/request/mReportApproval";
 
 export default {
@@ -227,22 +227,75 @@ export default {
       mfileForm: new FormData(),
       //分隔
       comment: "",
-      row: {}
+      row: {},
+      flag: 1
     };
   },
   created() {
     this.initData();
   },
+  mounted() {
+    this.$bus.$on("find", content => {
+      let data = {};
+      let reg = new RegExp(/^please input/);
+      for (let key in content) {
+        if (!reg.test(content[key]) && content[key] !== 0) {
+          data[key] = content[key];
+        }
+      }
+      // console.log(data);
+      findmReport(data).then(res => {
+        let tmp = null;
+        // console.log(res);
+        this.tableData = [];
+        res.data.forEach(item => {
+          tmp = item;
+          console.log(tmp);
+          tmp.userId = item.mreport.userId;
+          tmp.projectId = item.mreport.projectId;
+          tmp.mreport = 1;
+          tmp.oneId = item.teacherName;
+
+          // request({
+          //   url: "http://47.113.80.250:9003/project/select/" + tmp.userId,
+          //   method: "get"
+          // })
+          //   .then(res => {
+          //     console.log(res);
+          //     res.data.forEach(item => {
+          //       console.log(tmp);
+          //       console.log(item.projectId);
+          //       console.log("---------");
+
+          //       if (item.projectId === tmp.projectId) {
+          //         tmp.grade = item.grade;
+          //         // console.log("111");
+          //       }
+          //     });
+          //   })
+          //   .then(() => {
+          this.tableData.push(item);
+          //   });
+        });
+        console.log(this.tableData);
+        this.count = this.tableData.length;
+      });
+    });
+  },
   methods: {
     //初始化数据
     initData() {
       this.userId = localStorage.getItem("USERID");
+      // console.log(this.userId);
+
       request({
+        // url:
+        // "http://47.113.80.250:9003/report/college/select/all/" + this.userId,
         url: "http://47.113.80.250:9003/project/select/" + this.userId,
         method: "get"
       }).then(res => {
         this.tableData = [];
-        console.log(res);
+        // console.log(res);
         res.data.forEach(item => {
           this.tableData.push(item);
         });
@@ -254,7 +307,7 @@ export default {
     //点击拓展按钮显示拓展表格
     handleMange(index, row) {
       // console.log(index);
-      // console.log(row);
+      console.log(row);
       request({
         url: "http://47.113.80.250:9003/user/select/" + row[0].userId,
         method: "get"
@@ -272,7 +325,7 @@ export default {
     },
     //分页设置
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
       this.currentPage = val;
@@ -334,7 +387,7 @@ export default {
       }
     },
     pass() {
-      mReportApproval("teacher", {
+      mReportApproval("expert", {
         approval: 2,
         comment: this.comment,
         reportId: this.row.projectId
@@ -344,7 +397,7 @@ export default {
       });
     },
     noPass() {
-      mReportApproval("teacher", {
+      mReportApproval("expert", {
         approval: 1,
         comment: this.comment,
         reportId: this.row.projectId
@@ -354,7 +407,7 @@ export default {
       });
     },
     Back() {
-      mReportApproval("teacher", {
+      mReportApproval("expert", {
         approval: 3,
         comment: this.comment,
         reportId: this.row.projectId

@@ -14,6 +14,9 @@ const CollegeAdmin = () => import("../views/CollegeAdmin/collegeAdmin")
 const Admin = () => import("../views/Admin/admin")
 const Expert = () => import("../views/Expert/expert")
 const teacherContent = () => import("../components/content/teacherContent")
+const expertContent = () => import("../components/content/expertContent")
+const collegeAdminContent = () => import("../components/content/collegeAdminContent")
+
 
 Vue.use(VueRouter)
 
@@ -43,7 +46,11 @@ const routes = [{
 },
 {
   path: '/CollegeAdmin',
-  component: CollegeAdmin
+  component: CollegeAdmin,
+  children: [{
+    path: '/collegeAdminContent',
+    component: collegeAdminContent
+  }]
 },
 {
   path: '/Admin',
@@ -51,7 +58,11 @@ const routes = [{
 },
 {
   path: '/Expert',
-  component: Expert
+  component: Expert,
+  children: [{
+    path: '/expertContent',
+    component: expertContent
+  }]
 },
 ]
 
@@ -72,6 +83,11 @@ router.beforeEach((to, from, next) => {
     }
   } else {
     store.commit(CHECK_TOKEN)
+    // let identity_ids = ["/index", "/Teacher", "/CollegeAdmin", "/Admin", "/Expert"];
+    // if (identity_ids[localStorage.getItem('iid') - 1] !== to.path) {
+    //   alert("用户权限不足，无法访问该页面！")
+    // }
+    // next(identity_ids[localStorage.getItem('iid') - 1]);
     next()
   }
 })

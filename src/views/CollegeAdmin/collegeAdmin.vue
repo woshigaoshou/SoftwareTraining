@@ -1,11 +1,22 @@
 <template>
   <div>
-    <h2>collegeAdmin</h2>
+    <Header></Header>
+    <Left></Left>
   </div>
 </template>
 
 <script>
-export default {};
+import Header from "../../components/common/header";
+import Left from "../../components/common/leftCollegeAdmin";
+
+export default {
+  name: "collegeAdmin",
+  components: {
+    Header,
+    Left
+  },
+  methods: {}
+};
 </script>
 <style>
 </style>

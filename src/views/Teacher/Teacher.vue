@@ -7,7 +7,7 @@
 
 <script>
 import Header from "../../components/common/header";
-import Left from "../../components/common/leftCommon";
+import Left from "../../components/common/leftTeacher";
 
 export default {
   name: "Teacher",
