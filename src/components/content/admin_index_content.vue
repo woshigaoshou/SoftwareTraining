@@ -80,7 +80,7 @@
         </template>
       </el-table-column>
     </el-table>
-      
+
     <div class="block">
       <el-pagination
         @size-change="handleSizeChange"
@@ -92,6 +92,7 @@
         :total="total"
       ></el-pagination>
     </div>
+
     <div class="sumApp">
     <el-button type="primary" size="mini" @click="sumReport">汇总报表</el-button>
     <el-button type="primary" size="mini" @click="appoint">批量指派</el-button>
@@ -146,6 +147,7 @@
         <el-button type="primary" @click="submitAppoint">确认指派</el-button>
     </div>
      </el-dialog>
+
 
 
     <el-dialog
@@ -361,6 +363,7 @@ export default {
       ],
       isShow: false,
       expert: [],
+
       setExpertPid: [],
       getAllList:[],
       appointList:[],
@@ -369,6 +372,7 @@ export default {
       chooseExpert:'',
       chooseReport:[],
       expertId:''
+
     };
   },
   components: {
@@ -428,6 +432,7 @@ export default {
         this.tempList = this.tableData;
         console.log(this.tempList);
         
+
         return this.tempList;
       });
     },
@@ -711,6 +716,7 @@ export default {
     },
     cancel() {
       this.isShow = false;
+
     },
 
     //获取未指派中期文件还有专家名单
@@ -783,7 +789,6 @@ export default {
     
   },
 
-  
 };
 </script>
 
@@ -893,6 +898,7 @@ export default {
   margin-bottom: 10px;
 }
 
+
 .el-dropdown span {
   color: darkslategray;
 }
@@ -901,4 +907,5 @@ export default {
   right: 125px;
   bottom: 10px;
 }
+
 </style>

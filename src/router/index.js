@@ -41,6 +41,7 @@ const Expert = () => import("../views/Expert/expert")
 const teacherContent = () => import("../components/content/teacherContent")
 const expertContent = () => import("../components/content/expertContent")
 const collegeAdminContent = () => import("../components/content/collegeAdminContent")
+const AdminContent = () => import("../components/content/admin_index_content")
 
 >>>>>>> 8e355a6cad4e1044122c85dbf2d0f316aaaebf2d
 
@@ -131,7 +132,11 @@ const routes = [{
 },
 {
   path: '/Admin',
-  component: Admin
+  component: Admin,
+  children: [{
+    path: '/AdminContent',
+    component: AdminContent
+  }]
 },
 {
   path: '/Expert',
