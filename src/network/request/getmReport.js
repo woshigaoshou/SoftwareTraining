@@ -13,3 +13,17 @@ export function findmReport(data) {
     method: 'post'
   })
 }
+
+export function getAllExpert() {
+  return request3({
+    url: "/report/admin/select/expert/all"
+  })
+}
+
+export function setExpert(data) {
+  return request3({
+    url: "/report/admin/set/expert",
+    data,
+    method: 'post'
+  })
+}

@@ -76,6 +76,7 @@
             size="small"
             @click="mReportApproval(scope.$index, scope.row)"
           >审核</el-button>
+          <el-button type="primary" size="small" @click="setExpert(scope.row)">指派专家</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -245,13 +246,26 @@
         <el-button type="primary" @click="dialogFormVisible = false">确定</el-button>
       </div>
     </el-dialog>
+    <expertTable
+      :isShow="isShow"
+      class="eTable"
+      :expertData="expert"
+      @cancel="cancel"
+      :setExpertPid="setExpertPid"
+    ></expertTable>
+    <div class="login-bg" v-show="isShow"></div>
   </div>
 </template>
 
 <script>
 import { request } from "../../network/request/request";
 import { mReportApproval } from "../../network/request/mReportApproval";
-import { getmReport, findmReport } from "../../network/request/getmReport";
+import {
+  getmReport,
+  findmReport,
+  getAllExpert
+} from "../../network/request/getmReport";
+import expertTable from "./expertTable";
 
 //  var fileDownload = require('js-file-download')
 export default {
@@ -291,9 +305,15 @@ export default {
         { id: 9, name: "生命科学学院" },
         { id: 10, name: "经济管理学院" },
         { id: 11, name: "体育学院" }
-      ]
+      ],
+      isShow: false,
+      expert: [],
+      setExpertPid: []
       // collegeName:''
     };
+  },
+  components: {
+    expertTable
   },
   created() {
     this.initData();
@@ -371,7 +391,7 @@ export default {
       }).then(res => {
         this.userInfo = [];
         this.userInfo = row;
-        console.log(res);
+        // console.log(res);
         this.userInfo.userCollege = res.data.college.collegeName;
         this.userInfo.userName = res.data.user.userName;
         this.userInfo.userPhone = res.data.user.phone;
@@ -613,12 +633,36 @@ export default {
         URL.revokeObjectURL(elink.href); // 释放URL 对象
         document.body.removeChild(elink);
       });
+    },
+    setExpert(row) {
+      this.isShow = true;
+      // console.log(row);
+
+      this.setExpertPid.push(row.projectId.toString());
+
+      getAllExpert().then(res => {
+        console.log(res);
+        res.data.forEach(item => {
+          item.isSelect = false;
+        });
+        this.expert = res.data;
+      });
+    },
+    cancel() {
+      this.isShow = false;
     }
   }
 };
 </script>
 
 <style>
+.eTable {
+  position: absolute;
+  top: 160px;
+  left: 380px;
+  width: 860px !important;
+}
+
 .table-expand {
   font-size: 0;
 }
