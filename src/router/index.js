@@ -6,32 +6,41 @@ import {
     CHECK_TOKEN
 } from '../store/mutation-types'
 
+
 const login = () =>
     import ("../components/common/login");
-const student = () =>
-    import ("../views/student")
+const stu_index = () =>
+    import ("components/content/index_stu")
 const stu_index_content = () =>
     import ("components/content/stu_index_content")
 const Teacher = () =>
-    import ("../views/Teacher")
+    import ("../views/Teacher/Teacher")
 const CollegeAdmin = () =>
-    import ("../views/collegeAdmin")
+    import ("../views/CollegeAdmin/collegeAdmin")
 const Admin = () =>
-    import ("../views/admin")
-const admin_content = () =>
-    import ("../components/content/admin_index_content")
+    import ("../views/Admin/admin")
 const Expert = () =>
-    import ("../views/expert")
+    import ("../views/Expert/expert")
+const teacherContent = () =>
+    import ("../components/content/teacherContent")
+const expertContent = () =>
+    import ("../components/content/expertContent")
+const collegeAdminContent = () =>
+    import ("../components/content/collegeAdminContent")
+const AdminContent = () =>
+    import ("../components/content/admin_index_content")
+
 
 Vue.use(VueRouter)
 
 const routes = [{
+
         path: '/',
         redirect: '/login'
     },
     {
         path: '/index',
-        component: student,
+        component: stu_index,
         children: [{
             path: '/index',
             component: stu_index_content
@@ -43,23 +52,35 @@ const routes = [{
     },
     {
         path: '/Teacher',
-        component: Teacher
+        component: Teacher,
+        children: [{
+            path: '/teacherContent',
+            component: teacherContent
+        }]
     },
     {
         path: '/CollegeAdmin',
-        component: CollegeAdmin
+        component: CollegeAdmin,
+        children: [{
+            path: '/collegeAdminContent',
+            component: collegeAdminContent
+        }]
     },
     {
         path: '/Admin',
         component: Admin,
         children: [{
-            path: '/Admin/index',
-            component: admin_content
+            path: '/AdminContent',
+            component: AdminContent
         }]
     },
     {
         path: '/Expert',
-        component: Expert
+        component: Expert,
+        children: [{
+            path: '/expertContent',
+            component: expertContent
+        }]
     },
 ]
 
@@ -80,6 +101,11 @@ router.beforeEach((to, from, next) => {
         }
     } else {
         store.commit(CHECK_TOKEN)
+            // let identity_ids = ["/index", "/Teacher", "/CollegeAdmin", "/Admin", "/Expert"];
+            // if (identity_ids[localStorage.getItem('iid') - 1] !== to.path) {
+            //   alert("用户权限不足，无法访问该页面！")
+            // }
+            // next(identity_ids[localStorage.getItem('iid') - 1]);
         next()
     }
 })

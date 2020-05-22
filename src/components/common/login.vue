@@ -73,7 +73,12 @@ export default {
             alert("登录成功！");
             // console.log(res.message);
             let id = res.data.identityId;
-            this.$router.push(this.identity_ids[id - 1]);
+
+            // console.log(this.identity_ids[id - 1]);
+            localStorage.setItem("iid", id);
+
+            this.$router.replace(this.identity_ids[id - 1]);
+
           }
         });
       }

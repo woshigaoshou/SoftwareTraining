@@ -2,21 +2,19 @@
   <div>
     <Header></Header>
     <Left></Left>
-    <!-- <router-view></router-view> -->
   </div>
 </template>
 
 <script>
 import Header from "../../components/common/header";
-import Left from "../../components/common/left";
+import Left from "../../components/common/leftAdmin";
 export default {
-  name: "index_stu",
+  name: "admin",
   components: {
     Header,
     Left
   }
 };
 </script>
-
 <style>
 </style>
