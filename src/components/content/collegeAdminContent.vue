@@ -115,12 +115,8 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="pass" type="primary">通过</el-button>
         <el-button @click="noPass" type="primary">不通过</el-button>
-
         <el-button @click="BackStudent" type="primary">退回学生</el-button>
         <el-button @click="BackTeacher" type="primary">退回导师</el-button>
-        <el-button @click="BackStudent" type="primary">退回学生</el-button>
-        <el-button @click="BackTeacher" type="primary">退回导师</el-button>
-
       </div>
     </el-dialog>
     <el-dialog
@@ -156,7 +152,6 @@
 
             <span v-if="midReport.capproval === 3" style="color:blue">退回学生</span>
             <span v-if="midReport.capproval === 4" style="color:orange">退回导师</span>
-
           </el-form-item>
           <el-form-item label="大创管理评议:" label-width="100px" class="midDisscuss">
             <span v-if="midReport.sapproval === 0">未审核</span>
@@ -170,7 +165,6 @@
             <span v-if="midReport.eapproval === 2" style="color:green">已通过</span>
 
             <span v-if="midReport.eapproval === 3" style="color:orange">暂缓通过</span>
-
           </el-form-item>
           <el-form-item label="导师评语:" label-width="100px">
             <span>{{midReport.tcomment}}</span>
@@ -254,8 +248,8 @@ export default {
         { id: 9, name: "生命科学学院" },
         { id: 10, name: "经济管理学院" },
         { id: 11, name: "体育学院" }
-      ]
-
+      ],
+      reportId: 0
     };
   },
   created() {
@@ -280,7 +274,6 @@ export default {
 
           // console.log(tmp);
 
-
           tmp.userId = item.mreport.userId;
           tmp.projectId = item.mreport.projectId;
           tmp.mreport = 1;
@@ -291,7 +284,6 @@ export default {
               tmp.collegeId = item.id;
             }
           });
-
 
           // request({
           //   url: "http://47.113.80.250:9003/project/select/" + tmp.userId,
@@ -341,8 +333,6 @@ export default {
         this.total = this.tableData.length;
         this.tempList = this.tableData;
 
-
-
         return this.tableData;
       });
     },
@@ -390,32 +380,8 @@ export default {
       }
       // console.log(this.tempList);
       // this.tableData = this.tempList
-
-    handleSizeChange(pageSize) {
-      this.pageSize = pageSize;
-      this.handleCurrentChange(this.currentPage);
     },
-    handleCurrentChange(currentPage) {
-      this.currentPage1 = currentPage;
-      this.currentChangePage(this.tableData, currentPage);
-      console.log(this.tableData);
-    },
-    currentChangePage(list, currentPage) {
-      // console.log(list);
-      // console.log(currentPage);
 
-      let from = (currentPage - 1) * this.pageSize;
-      let to = currentPage * this.pageSize;
-      this.tempList = [];
-      for (; from < to; from++) {
-        if (list[from]) {
-          this.tempList.push(list[from]);
-        }
-      }
-      // console.log(this.tempList);
-      // this.tableData = this.tempList
-
-    },
     //中期报告信息获取
     mReport(index, row) {
       // console.log(row);
@@ -462,13 +428,22 @@ export default {
       //   console.log(res);
       // });
       this.row = row;
+      console.log(row);
 
       if (row.mreport === 1) {
         //操作
+        request({
+          url: "http://47.113.80.250:9003/report/select/" + row.projectId,
+          method: "get"
+        }).then(res => {
+          this.reportId = res.data.mreport.reportId;
+        });
+
         this.midReportNew.projectId = row.projectId;
         this.midReportNew.projectName = row.projectName;
         this.midReportNew.userId = row.userId;
         this.dialogFormVisibleNew = true;
+        // console.log(row.projectId);
 
         // mReportApproval("teacher", {
         //   approval: 2,
@@ -483,26 +458,23 @@ export default {
       }
     },
     pass() {
-
       mReportApproval("college", {
-
         approval: 2,
         comment: this.comment,
-        reportId: this.row.projectId
+        reportId: this.reportId
       }).then(res => {
         // console.log(res);
+        this.comment = "";
         this.dialogFormVisibleNew = false;
       });
     },
     noPass() {
-
       mReportApproval("college", {
-
         approval: 1,
         comment: this.comment,
-        reportId: this.row.projectId
+        reportId: this.reportId
       }).then(res => {
-
+        this.comment = "";
         console.log(res);
         this.dialogFormVisibleNew = false;
       });
@@ -510,10 +482,10 @@ export default {
     BackStudent() {
       mReportApproval("college", {
         approval: 3,
-
         comment: this.comment,
-        reportId: this.row.projectId
+        reportId: this.reportId
       }).then(res => {
+        this.comment = "";
         // console.log(res);
         this.dialogFormVisibleNew = false;
       });
@@ -524,6 +496,7 @@ export default {
         comment: this.comment,
         reportId: this.row.projectId
       }).then(res => {
+        this.comment = "";
         // console.log(res);
         this.dialogFormVisibleNew = false;
       });
