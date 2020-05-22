@@ -127,7 +127,7 @@
           </el-form-item>
           <el-form-item label="指派专家:" label-width="100px">
           <el-dropdown @command="handleCommand" trigger="click" placement="bottom-start">
-              <span class="el-dropdown-link" v-if="chooseExpert == ''">
+              <span class="el-dropdown-link expertList" v-if="chooseExpert == ''">
                 专家列表
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </span>
@@ -893,7 +893,7 @@ export default {
   margin-bottom: 10px;
 }
 
-.el-dropdown span {
+.expertList span {
   color: darkslategray;
 }
 .sumApp {

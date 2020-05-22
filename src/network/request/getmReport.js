@@ -13,7 +13,6 @@ export function findmReport(data) {
     method: 'post'
   })
 }
-<<<<<<< HEAD
 
 export function getAllExpert() {
   return request3({
@@ -28,5 +27,3 @@ export function setExpert(data) {
     method: 'post'
   })
 }
-=======
->>>>>>> 8e355a6cad4e1044122c85dbf2d0f316aaaebf2d

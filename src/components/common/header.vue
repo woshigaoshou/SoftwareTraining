@@ -6,10 +6,6 @@
       </div>
 
       <div class="header-search" v-show="isShow">
-<<<<<<< HEAD
-=======
-
->>>>>>> 8e355a6cad4e1044122c85dbf2d0f316aaaebf2d
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
           <el-form-item>
             <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -45,10 +41,6 @@
 
     <find v-show="showFind" class="find"></find>
     <div class="login-bg" v-show="showFind"></div>
-<<<<<<< HEAD
-=======
-
->>>>>>> 8e355a6cad4e1044122c85dbf2d0f316aaaebf2d
   </div>
 </template>
 
@@ -58,10 +50,6 @@ import { request } from "../../network/request/request";
 
 import find from "./find";
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 8e355a6cad4e1044122c85dbf2d0f316aaaebf2d
 export default {
   data() {
     return {
@@ -103,10 +91,6 @@ export default {
 
       // this.$bus.$emit("find", this.formInline.content);
       this.showFind = true;
-<<<<<<< HEAD
-=======
-
->>>>>>> 8e355a6cad4e1044122c85dbf2d0f316aaaebf2d
     },
     logout() {
       // console.log(this.$store.state.loginForm.userID);
@@ -205,8 +189,4 @@ header {
   background: rgba(0, 0, 0, 0.6);
   z-index: 999;
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 8e355a6cad4e1044122c85dbf2d0f316aaaebf2d
 </style>

@@ -52,10 +52,7 @@
       <template>
         <el-table-column label="项目名称" width="270" prop="projectName"></el-table-column>
         <el-table-column label="项目负责人学号" width="180" prop="userId"></el-table-column>
-<<<<<<< HEAD
         <el-table-column label="所属学院" width="150" prop="collegeId" :formatter="GetCollegeName"></el-table-column>
-=======
->>>>>>> 8e355a6cad4e1044122c85dbf2d0f316aaaebf2d
         <el-table-column label="项目等级" width="150">
           <template slot-scope="scope">
             <span v-if="scope.row.grade === 1">校级</span>
@@ -149,12 +146,8 @@
             <span v-if="midReport.capproval === 0">未审核</span>
             <span v-if="midReport.capproval === 1" style="color:red">不通过</span>
             <span v-if="midReport.capproval === 2" style="color:green">已通过</span>
-<<<<<<< HEAD
             <span v-if="midReport.capproval === 3" style="color:blue">退回学生</span>
             <span v-if="midReport.capproval === 4" style="color:orange">退回导师</span>
-=======
-            <span v-if="midReport.capproval === 3" style="color:orange">退回修改</span>
->>>>>>> 8e355a6cad4e1044122c85dbf2d0f316aaaebf2d
           </el-form-item>
           <el-form-item label="大创管理评议:" label-width="100px" class="midDisscuss">
             <span v-if="midReport.sapproval === 0">未审核</span>
@@ -166,11 +159,7 @@
             <span v-if="midReport.eapproval === 0">未审核</span>
             <span v-if="midReport.eapproval === 1" style="color:red">不通过</span>
             <span v-if="midReport.eapproval === 2" style="color:green">已通过</span>
-<<<<<<< HEAD
             <span v-if="midReport.eapproval === 3" style="color:orange">暂缓通过</span>
-=======
-            <span v-if="midReport.eapproval === 3" style="color:orange">退回修改</span>
->>>>>>> 8e355a6cad4e1044122c85dbf2d0f316aaaebf2d
           </el-form-item>
           <el-form-item label="导师评语:" label-width="100px">
             <span>{{midReport.tcomment}}</span>
@@ -240,7 +229,6 @@ export default {
       mfileForm: new FormData(),
       //分隔
       comment: "",
-<<<<<<< HEAD
       row: {},
       collegeList: [
         { id: 1, name: "计算机科学与工程学院" },
@@ -255,9 +243,6 @@ export default {
         { id: 10, name: "经济管理学院" },
         { id: 11, name: "体育学院" }
       ]
-=======
-      row: {}
->>>>>>> 8e355a6cad4e1044122c85dbf2d0f316aaaebf2d
     };
   },
   created() {
@@ -277,13 +262,9 @@ export default {
           this.tableData.push(item);
         });
         // console.log(this.tableData);
-<<<<<<< HEAD
         this.total = this.tableData.length;
         this.tempList = this.tableData;
 
-=======
-        this.count = this.tableData.length;
->>>>>>> 8e355a6cad4e1044122c85dbf2d0f316aaaebf2d
         return this.tableData;
       });
     },
@@ -307,7 +288,6 @@ export default {
       });
     },
     //分页设置
-<<<<<<< HEAD
     handleSizeChange(pageSize) {
       this.pageSize = pageSize;
       this.handleCurrentChange(this.currentPage);
@@ -341,15 +321,6 @@ export default {
           return this.collegeList[i].name;
         }
       }
-=======
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange(val) {
-      this.currentPage = val;
-      this.offset = (val - 1) * this.limit;
-      // this.getResturants()
->>>>>>> 8e355a6cad4e1044122c85dbf2d0f316aaaebf2d
     },
     //中期报告信息获取
     mReport(index, row) {
