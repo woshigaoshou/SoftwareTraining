@@ -126,7 +126,9 @@
             </el-table-column>
           </el-table>
         </el-form-item>
+
         <el-form-item label="指派专家:" label-width="100px" class="appoint">
+
           <el-dropdown @command="handleCommand" trigger="click" placement="bottom-start">
             <span class="el-dropdown-link" v-if="chooseExpert == ''">
               专家列表
@@ -725,6 +727,7 @@ export default {
         url: "http://47.113.80.250:9003/report/select/" + row.projectId,
         method: "get"
       }).then(res => {
+
         console.log(res);
         if(res.code !== 200) {
           alert(res.message);
@@ -739,6 +742,7 @@ export default {
         }
         
         
+
         // console.log(this.setReportId);
         // console.log(this.setExpertPid);
       });
@@ -820,7 +824,7 @@ export default {
         });
         this.appointedForm = false;
       }
-    },
+
         //中期报告文件下载
     download(row) {
       request({
@@ -843,6 +847,7 @@ export default {
         URL.revokeObjectURL(elink.href); // 释放URL 对象
         document.body.removeChild(elink);
       })
+
     }
   }
 };
@@ -954,7 +959,10 @@ export default {
   margin-bottom: 10px;
 }
 
+
 .appoint span {
+
+
   color: darkslategray;
 }
 .sumApp {

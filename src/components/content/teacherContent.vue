@@ -430,6 +430,7 @@ export default {
           return this.collegeList[i].name;
         }
       }
+
     },
         //中期报告文件下载
     download(row) {
@@ -453,6 +454,7 @@ export default {
         URL.revokeObjectURL(elink.href); // 释放URL 对象
         document.body.removeChild(elink);
       })
+
     }
   }
 };

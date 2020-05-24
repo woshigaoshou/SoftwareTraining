@@ -278,6 +278,7 @@ export default {
         res.data.forEach(item => {
           tmp = item;
           // console.log(tmp);
+
           tmp.userId = item.mreport.userId;
           tmp.projectId = item.mreport.projectId;
           tmp.mreport = 1;
@@ -288,7 +289,9 @@ export default {
               tmp.collegeId = item.id;
             }
           });
+
           this.tempList.push(item);
+
         });
         }
         
@@ -340,6 +343,7 @@ export default {
       });
     },
     //分页设置
+
      handleSizeChange(pageSize) {
         this.pageSize = pageSize
         this.handleCurrentChange(this.currentPage);
@@ -366,6 +370,7 @@ export default {
           // this.tableData = this.tempList
           
        },
+
 
     //中期报告信息获取
     mReport(index, row) {
@@ -449,7 +454,9 @@ export default {
         reportId: this.reportId
       }).then(res => {
         // console.log(res);
+
         alert(res.message)
+
         this.comment = "";
         this.dialogFormVisibleNew = false;
       });
@@ -461,8 +468,10 @@ export default {
         reportId: this.reportId
       }).then(res => {
         this.comment = "";
+
         // console.log(res);
         alert(res.message)
+
         this.dialogFormVisibleNew = false;
       });
     },
@@ -473,7 +482,9 @@ export default {
         reportId: this.reportId
       }).then(res => {
         this.comment = "";
+
         alert(res.message)
+
         // console.log(res);
         this.dialogFormVisibleNew = false;
       });
