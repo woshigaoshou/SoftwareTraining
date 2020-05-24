@@ -50,10 +50,12 @@
         </template>
       </el-table-column>
       <template>
-        <el-table-column label="项目名称" width="270" prop="projectName"></el-table-column>
-        <el-table-column label="项目负责人学号" width="180" prop="userId"></el-table-column>
-        <el-table-column label="所属学院" width="150" prop="collegeId" :formatter="GetCollegeName"></el-table-column>
-        <el-table-column label="项目等级" width="150">
+        <el-table-column label="项目名称" width="250" prop="projectName"></el-table-column>
+        <el-table-column label="项目负责人学号" width="150" prop="userId"></el-table-column>
+
+        <el-table-column label="所属学院" width="165" prop="collegeId" :formatter="GetCollegeName"></el-table-column>
+
+        <el-table-column label="项目等级" width="100">
           <template slot-scope="scope">
             <span v-if="scope.row.grade === 1">校级</span>
             <span v-if="scope.row.grade === 2">省级</span>
@@ -61,14 +63,14 @@
             <span v-if="scope.row.grade === 0">无</span>
           </template>
         </el-table-column>
-        <el-table-column label="中期报告" width="150">
+        <el-table-column label="中期报告" width="100">
           <template slot-scope="scope">
             <span v-if="scope.row.mreport == 1" style="color:green">已提交</span>
             <span v-else style="color:red">未提交</span>
           </template>
         </el-table-column>
       </template>
-      <el-table-column label="中期报告操作" width="150">
+      <el-table-column label="中期报告操作">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="mReport(scope.$index, scope.row)">查看</el-button>
           <el-button
@@ -146,6 +148,7 @@
             <span v-if="midReport.capproval === 0">未审核</span>
             <span v-if="midReport.capproval === 1" style="color:red">不通过</span>
             <span v-if="midReport.capproval === 2" style="color:green">已通过</span>
+
             <span v-if="midReport.capproval === 3" style="color:blue">退回学生</span>
             <span v-if="midReport.capproval === 4" style="color:orange">退回导师</span>
           </el-form-item>
@@ -159,6 +162,7 @@
             <span v-if="midReport.eapproval === 0">未审核</span>
             <span v-if="midReport.eapproval === 1" style="color:red">不通过</span>
             <span v-if="midReport.eapproval === 2" style="color:green">已通过</span>
+
             <span v-if="midReport.eapproval === 3" style="color:orange">暂缓通过</span>
           </el-form-item>
           <el-form-item label="导师评语:" label-width="100px">
@@ -185,9 +189,10 @@
                   >
                     <el-button size="mini" type="primary">预览</el-button>
                   </el-link>
-                  <el-link :href="scope.row.furl" style="margin-left:10px">
-                    <el-button type="primary" size="mini">下载</el-button>
-                  </el-link>
+                  <el-button type="primary" size="mini" 
+                    style="margin-left:10px"
+                    @click="download(scope.row)">
+                      下载</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -229,6 +234,7 @@ export default {
       mfileForm: new FormData(),
       //分隔
       comment: "",
+
       row: {},
       collegeList: [
         { id: 1, name: "计算机科学与工程学院" },
@@ -242,7 +248,8 @@ export default {
         { id: 9, name: "生命科学学院" },
         { id: 10, name: "经济管理学院" },
         { id: 11, name: "体育学院" }
-      ]
+      ],
+      reportId: 0
     };
   },
   created() {
@@ -262,8 +269,10 @@ export default {
           this.tableData.push(item);
         });
         // console.log(this.tableData);
+
         this.total = this.tableData.length;
         this.tempList = this.tableData;
+
         return this.tableData;
       });
     },
@@ -287,6 +296,7 @@ export default {
       });
     },
     //分页设置
+
     handleSizeChange(pageSize) {
       this.pageSize = pageSize;
       this.handleCurrentChange(this.currentPage);
@@ -308,9 +318,10 @@ export default {
           this.tempList.push(list[from]);
         }
       }
-      // console.log(this.tempList);
-      // this.tableData = this.tempList
     },
+    // console.log(this.tempList);
+    // this.tableData = this.tempList
+
     //中期报告信息获取
     mReport(index, row) {
       // console.log(row);
@@ -345,13 +356,22 @@ export default {
       //   console.log(res);
       // });
       this.row = row;
+      console.log(row);
 
       if (row.mreport === 1) {
         //操作
+        request({
+          url: "http://47.113.80.250:9003/report/select/" + row.projectId,
+          method: "get"
+        }).then(res => {
+          this.reportId = res.data.mreport.reportId;
+        });
+
         this.midReportNew.projectId = row.projectId;
         this.midReportNew.projectName = row.projectName;
         this.midReportNew.userId = row.userId;
         this.dialogFormVisibleNew = true;
+        // console.log(row.projectId);
 
         // mReportApproval("teacher", {
         //   approval: 2,
@@ -366,12 +386,16 @@ export default {
       }
     },
     pass() {
+      console.log(this.row);
+      // console.log(this.comment);
+
       mReportApproval("teacher", {
         approval: 2,
         comment: this.comment,
-        reportId: this.row.projectId
+        reportId: this.reportId
       }).then(res => {
         console.log(res);
+        this.comment = "";
         this.dialogFormVisibleNew = false;
       });
     },
@@ -379,9 +403,10 @@ export default {
       mReportApproval("teacher", {
         approval: 1,
         comment: this.comment,
-        reportId: this.row.projectId
+        reportId: this.reportId
       }).then(res => {
         // console.log(res);
+        this.comment = "";
         this.dialogFormVisibleNew = false;
       });
     },
@@ -389,8 +414,9 @@ export default {
       mReportApproval("teacher", {
         approval: 3,
         comment: this.comment,
-        reportId: this.row.projectId
+        reportId: this.reportId
       }).then(res => {
+        this.comment = "";
         // console.log(res);
         this.dialogFormVisibleNew = false;
       });
@@ -404,6 +430,29 @@ export default {
           return this.collegeList[i].name;
         }
       }
+    },
+        //中期报告文件下载
+    download(row) {
+      request({
+        url:'http://47.113.80.250:9002/download',
+        data:{
+          fileUrl:row.furl,
+          fileName:row.fname
+        },
+        method:'POST'
+      }).then(res => {
+       const content = res;
+        const blob = new Blob([content]);
+        const fileName = row.fname; //下载文件名称
+        const elink = document.createElement("a");
+        elink.download = fileName;
+        //  elink.style.display = 'none';
+        elink.href = URL.createObjectURL(blob);
+        document.body.appendChild(elink);
+        elink.click();
+        URL.revokeObjectURL(elink.href); // 释放URL 对象
+        document.body.removeChild(elink);
+      })
     }
   }
 };

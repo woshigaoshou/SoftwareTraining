@@ -79,21 +79,24 @@ export default {
     certain() {
       console.log("expert:" + this.selectId);
       console.log("reportIds:" + this.setExpertPid);
+      // console.log(Array.isArray(this.setExpertPid));
 
       setExpert({
         expert: this.selectId,
         reportIds: this.setExpertPid
+        // expert: "expert1",
+        // reportIds: ["7", "8"]
       }).then(res => {
         console.log(res);
       });
 
       // console.log(item);
-
+      this.selectId = "";
       this.$emit("cancel");
     },
     cancel() {
       // console.log("取消");
-      this.selectId = [];
+      this.selectId = "";
       this.$emit("cancel");
     },
     select(e, row) {

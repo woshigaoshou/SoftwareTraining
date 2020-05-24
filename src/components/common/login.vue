@@ -9,12 +9,16 @@
         <el-input type="password" v-model="loginForm.userPsw" placeholder="请输入密码"></el-input>
       </el-form-item>
       <el-form-item label="验证码" prop="pass" id="identParent">
-        <el-input type="input" v-model="loginForm.randString" placeholder="请输入验证码"></el-input>
+        <el-input
+          type="input"
+          v-model="loginForm.randString"
+          placeholder="请输入验证码"
+          class="randString"
+        ></el-input>
         <img :src="imgsrc" id="ident" @click="createImg" />
       </el-form-item>
       <el-form-item class="btn">
         <el-button type="primary" @click="submit">登录</el-button>
-        <el-button @click="register">注册</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -34,7 +38,7 @@ export default {
         randString: ""
       },
       imgsrc: this.createImg(),
-      identity_ids: ["/index", "/Teacher", "/CollegeAdmin", "/Admin", "/Expert"]
+      identity_ids: ["/index", "/teacherContent", "/collegeAdminContent", "/adminContent", "/expertContent"]
     };
   },
   methods: {
@@ -78,7 +82,6 @@ export default {
             localStorage.setItem("iid", id);
 
             this.$router.replace(this.identity_ids[id - 1]);
-
           }
         });
       }
@@ -90,13 +93,16 @@ export default {
 };
 </script>
 <style>
+.randString .el-input__inner {
+  width: 60% !important;
+}
 form {
   width: 350px;
   margin-top: 180px;
   margin-left: 520px;
 }
 .btn {
-  margin-left: 40px;
+  margin-left: 60px !important;
 }
 form p {
   font-size: 30px;
@@ -105,6 +111,7 @@ form p {
 }
 #identParent .el-input {
   width: 125px;
+  margin-right: 10px !important;
 }
 #identParent input {
   display: inline-block;
