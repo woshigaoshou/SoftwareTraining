@@ -31,7 +31,6 @@
               </template>
             </el-dropdown-item>
             <el-dropdown-item>个人主页</el-dropdown-item>
-            <el-dropdown-item>我的消息</el-dropdown-item>
             <el-dropdown-item>
               <el-button @click="logout">退出账号</el-button>
             </el-dropdown-item>

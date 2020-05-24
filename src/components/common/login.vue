@@ -38,7 +38,7 @@ export default {
         randString: ""
       },
       imgsrc: this.createImg(),
-      identity_ids: ["/index", "/Teacher", "/CollegeAdmin", "/Admin", "/Expert"]
+      identity_ids: ["/index", "/teacherContent", "/collegeAdminContent", "/adminContent", "/expertContent"]
     };
   },
   methods: {

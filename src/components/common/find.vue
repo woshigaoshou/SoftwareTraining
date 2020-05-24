@@ -2,31 +2,31 @@
   <div>
     <el-form ref="form" :model="form" label-width="80px">
       <el-form-item label="专家id">
-        <el-input v-model="form.expert"></el-input>
+        <el-input v-model="form.expert" placeholder="please input"></el-input>
       </el-form-item>
       <el-form-item label="专家姓名">
-        <el-input v-model="form.expertName"></el-input>
+        <el-input v-model="form.expertName" placeholder="please input"></el-input>
       </el-form-item>
       <el-form-item label="指导老师id">
-        <el-input v-model="form.oneId"></el-input>
+        <el-input v-model="form.oneId" placeholder="please input"></el-input>
       </el-form-item>
       <el-form-item label="指导老师姓名">
-        <el-input v-model="form.teacherName"></el-input>
+        <el-input v-model="form.teacherName" placeholder="please input"></el-input>
       </el-form-item>
       <el-form-item label="项目id">
-        <el-input v-model="form.projectId"></el-input>
+        <el-input v-model="form.projectId" placeholder="please input"></el-input>
       </el-form-item>
       <el-form-item label="项目名字">
-        <el-input v-model="form.projectName"></el-input>
+        <el-input v-model="form.projectName" placeholder="please input"></el-input>
       </el-form-item>
       <el-form-item label="报告id">
-        <el-input v-model="form.reportId"></el-input>
+        <el-input v-model="form.reportId" placeholder="please input"></el-input>
       </el-form-item>
       <el-form-item label="负责人id">
-        <el-input v-model="form.userId"></el-input>
+        <el-input v-model="form.userId" placeholder="please input"></el-input>
       </el-form-item>
       <el-form-item label="负责人姓名">
-        <el-input v-model="form.userName"></el-input>
+        <el-input v-model="form.userName" placeholder="please input"></el-input>
       </el-form-item>
       <el-form-item class="btn">
         <el-button type="primary" @click="onSubmit">确定</el-button>
@@ -41,15 +41,15 @@ export default {
   data() {
     return {
       form: {
-        expert: "please input",
-        expertName: "please input",
-        oneId: "please input",
-        projectId: 0,
-        projectName: "please input",
-        reportId: 0,
-        teacherName: "please input",
-        userId: "please input",
-        userName: "please input"
+        expert: "",
+        expertName: "",
+        oneId: "",
+        projectId: "",
+        projectName: "",
+        reportId: "",
+        teacherName: "",
+        userId: "",
+        userName: ""
       }
     };
   },

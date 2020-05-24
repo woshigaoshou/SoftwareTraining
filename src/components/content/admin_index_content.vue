@@ -50,10 +50,10 @@
         </template>
       </el-table-column>
       <template>
-        <el-table-column label="项目名称" width="283" prop="projectName"></el-table-column>
-        <el-table-column label="项目负责人学号" width="140" prop="userId"></el-table-column>
-        <el-table-column label="所属学院" width="150" prop="collegeId" :formatter="GetCollegeName"></el-table-column>
-        <el-table-column label="项目等级" width="90" align="center">
+        <el-table-column label="项目名称" width="200" prop="projectName"></el-table-column>
+        <el-table-column label="项目负责人学号" width="130" prop="userId"></el-table-column>
+        <el-table-column label="所属学院" width="170" prop="collegeId" :formatter="GetCollegeName"></el-table-column>
+        <el-table-column label="项目等级" width="80" align="center">
           <template slot-scope="scope">
             <span v-if="scope.row.grade === 1">校级</span>
             <span v-if="scope.row.grade === 2">省级</span>
@@ -61,14 +61,14 @@
             <span v-if="scope.row.grade === 0">无</span>
           </template>
         </el-table-column>
-        <el-table-column label="中期报告" width="90" align="center">
+        <el-table-column label="中期报告" width="80" align="center">
           <template slot-scope="scope">
             <span v-if="scope.row.mreport == 1" style="color:green">已提交</span>
             <span v-else style="color:red">未提交</span>
           </template>
         </el-table-column>
       </template>
-      <el-table-column label="中期报告操作">
+      <el-table-column label="中期报告操作" align="center">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="mReport(scope.$index, scope.row)">查看</el-button>
           <el-button
@@ -126,7 +126,9 @@
             </el-table-column>
           </el-table>
         </el-form-item>
-        <el-form-item label="指派专家:" label-width="100px">
+
+        <el-form-item label="指派专家:" label-width="100px" class="appoint">
+
           <el-dropdown @command="handleCommand" trigger="click" placement="bottom-start">
             <span class="el-dropdown-link" v-if="chooseExpert == ''">
               专家列表
@@ -279,9 +281,10 @@
                   >
                     <el-button size="mini" type="primary">预览</el-button>
                   </el-link>
-                  <el-link :href="scope.row.furl" style="margin-left:10px">
-                    <el-button type="primary" size="mini">下载</el-button>
-                  </el-link>
+                  <el-button type="primary" size="mini" 
+                    style="margin-left:10px"
+                    @click="download(scope.row)">
+                      下载</el-button>
                   <el-popconfirm
                     confirmButtonText="确认"
                     cancelButtonText="不了"
@@ -364,7 +367,6 @@ export default {
       ],
       isShow: false,
       expert: [],
-
       setExpertPid: [],
       getAllList: [],
       appointList: [],
@@ -386,7 +388,7 @@ export default {
   mounted() {
     this.$bus.$on("find", content => {
       let data = {};
-      let reg = new RegExp(/^please input/);
+      let reg = new RegExp(/^""/);
       for (let key in content) {
         if (!reg.test(content[key]) && content[key] !== 0) {
           data[key] = content[key];
@@ -394,8 +396,11 @@ export default {
       }
       // console.log(data);
       findmReport(data).then(res => {
-        let tmp = null;
-        // console.log(res);
+        if(res.data.length === 0) {
+          alert('该项目未提交中期报告或输入信息错误')
+        }else {
+          let tmp = null;
+        console.log(res);
         this.tempList = [];
         res.data.forEach(item => {
           tmp = item;
@@ -412,6 +417,8 @@ export default {
           this.tempList.push(item);
         });
         console.log(this.tempList);
+        }
+        
       });
     });
   },
@@ -492,7 +499,7 @@ export default {
       // console.log(this.tempList);
       // this.tableData = this.tempList
     },
-    //认可 中期报告
+    //认可中期报告
     mReportApproval(index, row) {
       // console.log("点击认可");
       // getmReport().then(res => {
@@ -714,16 +721,28 @@ export default {
     },
     //单个指派
     setExpert(row) {
-      this.isShow = true;
+      
       // console.log(row);
       request({
         url: "http://47.113.80.250:9003/report/select/" + row.projectId,
         method: "get"
       }).then(res => {
-        // console.log(res);
 
+        console.log(res);
+        if(res.code !== 200) {
+          alert(res.message);
+        }else if(res.code === 200) {
+          if(res.data.mreport.expert !== "") {
+          alert('该项目已指派专家')
+        }else{
         this.setReportId = res.data.mreport.reportId;
         this.setExpertPid.push(this.setReportId);
+        this.isShow = true;
+        }
+        }
+        
+        
+
         // console.log(this.setReportId);
         // console.log(this.setExpertPid);
       });
@@ -805,6 +824,30 @@ export default {
         });
         this.appointedForm = false;
       }
+
+        //中期报告文件下载
+    download(row) {
+      request({
+        url:'http://47.113.80.250:9002/download',
+        data:{
+          fileUrl:row.furl,
+          fileName:row.fname
+        },
+        method:'POST'
+      }).then(res => {
+       const content = res;
+        const blob = new Blob([content]);
+        const fileName = row.fname; //下载文件名称
+        const elink = document.createElement("a");
+        elink.download = fileName;
+        //  elink.style.display = 'none';
+        elink.href = URL.createObjectURL(blob);
+        document.body.appendChild(elink);
+        elink.click();
+        URL.revokeObjectURL(elink.href); // 释放URL 对象
+        document.body.removeChild(elink);
+      })
+
     }
   }
 };
@@ -916,12 +959,15 @@ export default {
   margin-bottom: 10px;
 }
 
-.el-dropdown span {
+
+.appoint span {
+
+
   color: darkslategray;
 }
 .sumApp {
   position: absolute;
-  right: 125px;
+  right: 145px;
   bottom: 10px;
 }
 </style>

@@ -243,9 +243,11 @@
                   >
                     <el-button size="mini" type="primary">预览</el-button>
                   </el-link>
-                  <el-link :href="scope.row.furl" style="margin-left:10px">
-                    <el-button type="primary" size="mini">下载</el-button>
-                  </el-link>
+                    <el-button type="primary" size="mini" 
+                    style="margin-left:10px"
+                    @click="download(scope.row)">
+                      下载</el-button>
+                  
                   <el-popconfirm
                     confirmButtonText="确认"
                     cancelButtonText="不了"
@@ -301,7 +303,6 @@ export default {
         {id:7,name:'建筑与土木工程学院'},{id:8,name:'旭日广东服装学院'},{id:9,name:'生命科学学院'},
         {id:10,name:'经济管理学院'},{id:11,name:'体育学院'}
       ],
-      // collegeName:''
     }
 
   },
@@ -526,6 +527,31 @@ export default {
             alert(err);
           });
       }
+    },
+
+    //中期报告文件下载
+    download(row) {
+      request({
+        url:'http://47.113.80.250:9002/download',
+        data:{
+          fileUrl:row.furl,
+          fileName:row.fname
+        },
+        method:'POST'
+      }).then(res => {
+       const content = res;
+        const blob = new Blob([content]);
+        const fileName = row.fname; //下载文件名称
+        const elink = document.createElement("a");
+        elink.download = fileName;
+        //  elink.style.display = 'none';
+        elink.href = URL.createObjectURL(blob);
+        document.body.appendChild(elink);
+        elink.click();
+        URL.revokeObjectURL(elink.href); // 释放URL 对象
+        document.body.removeChild(elink);
+      })
+      
     }
   }
 };
