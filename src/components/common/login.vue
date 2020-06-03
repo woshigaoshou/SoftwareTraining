@@ -38,7 +38,13 @@ export default {
         randString: ""
       },
       imgsrc: this.createImg(),
-      identity_ids: ["/index", "/teacherContent", "/collegeAdminContent", "/adminContent", "/expertContent"]
+      identity_ids: [
+        "/index",
+        "/teacherContent",
+        "/collegeAdminContent",
+        "/adminContent",
+        "/expertContent"
+      ]
     };
   },
   methods: {
@@ -92,9 +98,9 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 .randString .el-input__inner {
-  width: 60% !important;
+  width: 100% !important;
 }
 form {
   width: 350px;

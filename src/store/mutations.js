@@ -18,12 +18,14 @@ export default {
   },
   [CHECK_TOKEN](state) {
     let token = localStorage.getItem('Authorization');
+    // console.log(token);
     if (token === '' || token === null) {
       alert('登录已失效，请重新登录');
-      router.push('/login');
       return false;
     }
-    return true;
+    else {
+      return true;
+    }
   },
   [SUBUSER](state, user) {
     // console.log(user);

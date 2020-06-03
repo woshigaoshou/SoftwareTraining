@@ -82,16 +82,16 @@
       </el-table-column>
     </el-table>
     <div class="block">
-            <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange" 
-              :current-page.sync="currentPage"
-              :page-sizes="[1, 5, 10, 20]"
-              :page-size="pageSize" 
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="total">
-            </el-pagination>
-       </div>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage"
+        :page-sizes="[1, 5, 10, 20]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      ></el-pagination>
+    </div>
 
     <el-dialog
       v-model="dialogFormVisibleNew"
@@ -191,10 +191,12 @@
                   >
                     <el-button size="mini" type="primary">预览</el-button>
                   </el-link>
-                  <el-button type="primary" size="mini" 
+                  <el-button
+                    type="primary"
+                    size="mini"
                     style="margin-left:10px"
-                    @click="download(scope.row)">
-                      下载</el-button>
+                    @click="download(scope.row)"
+                  >下载</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -224,10 +226,10 @@ export default {
       userInfo: [],
       total: 0,
       currentPage: 1,
-      pageSize:10,
+      pageSize: 10,
       midReport: [],
       midReportNew: [],
-      tempList:[],
+      tempList: [],
       projectName: "",
       mfiles: [],
       content: "",
@@ -269,32 +271,31 @@ export default {
       }
       // console.log(data);
       findmReport(data).then(res => {
-        if(res.data.length === 0) {
-          alert('该项目未提交中期报告或输入信息错误')
-        }else {
+        if (res.data.length === 0) {
+          alert("该项目未提交中期报告或输入信息错误");
+        } else {
           let tmp = null;
-        // console.log(res);
-        this.tempList = [];
-        res.data.forEach(item => {
-          tmp = item;
-          // console.log(tmp);
+          // console.log(res);
+          this.tempList = [];
+          res.data.forEach(item => {
+            tmp = item;
+            // console.log(tmp);
 
-          tmp.userId = item.mreport.userId;
-          tmp.projectId = item.mreport.projectId;
-          tmp.mreport = 1;
-          tmp.oneId = item.teacherName;
+            tmp.userId = item.mreport.userId;
+            tmp.projectId = item.mreport.projectId;
+            tmp.mreport = 1;
+            tmp.oneId = item.teacherName;
 
-          this.collegeList.forEach(item => {
-            if (item.name === tmp.collegeName) {
-              tmp.collegeId = item.id;
-            }
+            this.collegeList.forEach(item => {
+              if (item.name === tmp.collegeName) {
+                tmp.collegeId = item.id;
+              }
+            });
+
+            this.tempList.push(item);
           });
-
-          this.tempList.push(item);
-
-        });
         }
-        
+
         console.log(this.tableData);
         this.count = this.tempList.length;
       });
@@ -344,33 +345,30 @@ export default {
     },
     //分页设置
 
-     handleSizeChange(pageSize) {
-        this.pageSize = pageSize
-        this.handleCurrentChange(this.currentPage);
-      },
-      handleCurrentChange(currentPage) {
-       this.currentPage1 = currentPage
-      this.currentChangePage(this.tableData,currentPage)
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize;
+      this.handleCurrentChange(this.currentPage);
+    },
+    handleCurrentChange(currentPage) {
+      this.currentPage1 = currentPage;
+      this.currentChangePage(this.tableData, currentPage);
       console.log(this.tableData);
-      
-      },
-      currentChangePage(list,currentPage) { 
-        // console.log(list);
-        // console.log(currentPage);
-        
-          let from = (currentPage - 1) * this.pageSize;
-          let to = currentPage * this.pageSize;
-          this.tempList = [];
-          for (; from < to; from++) {
-           if (list[from]) {
-            this.tempList.push(list[from]);
-           }
-          }
-          // console.log(this.tempList);
-          // this.tableData = this.tempList
-          
-       },
+    },
+    currentChangePage(list, currentPage) {
+      // console.log(list);
+      // console.log(currentPage);
 
+      let from = (currentPage - 1) * this.pageSize;
+      let to = currentPage * this.pageSize;
+      this.tempList = [];
+      for (; from < to; from++) {
+        if (list[from]) {
+          this.tempList.push(list[from]);
+        }
+      }
+      // console.log(this.tempList);
+      // this.tableData = this.tempList
+    },
 
     //中期报告信息获取
     mReport(index, row) {
@@ -455,7 +453,7 @@ export default {
       }).then(res => {
         // console.log(res);
 
-        alert(res.message)
+        alert(res.message);
 
         this.comment = "";
         this.dialogFormVisibleNew = false;
@@ -470,7 +468,7 @@ export default {
         this.comment = "";
 
         // console.log(res);
-        alert(res.message)
+        alert(res.message);
 
         this.dialogFormVisibleNew = false;
       });
@@ -483,7 +481,7 @@ export default {
       }).then(res => {
         this.comment = "";
 
-        alert(res.message)
+        alert(res.message);
 
         // console.log(res);
         this.dialogFormVisibleNew = false;
@@ -497,21 +495,21 @@ export default {
       }).then(res => {
         this.comment = "";
         // console.log(res);
-        alert(res.message)
+        alert(res.message);
         this.dialogFormVisibleNew = false;
       });
     },
-        //中期报告文件下载
+    //中期报告文件下载
     download(row) {
       request({
-        url:'http://47.113.80.250:9002/download',
-        data:{
-          fileUrl:row.furl,
-          fileName:row.fname
+        url: "http://47.113.80.250:9002/download",
+        data: {
+          fileUrl: row.furl,
+          fileName: row.fname
         },
-        method:'POST'
+        method: "POST"
       }).then(res => {
-       const content = res;
+        const content = res;
         const blob = new Blob([content]);
         const fileName = row.fname; //下载文件名称
         const elink = document.createElement("a");
@@ -522,13 +520,13 @@ export default {
         elink.click();
         URL.revokeObjectURL(elink.href); // 释放URL 对象
         document.body.removeChild(elink);
-      })
+      });
     }
   }
 };
 </script>
 
-<style>
+<style scoped>
 .table-expand {
   font-size: 0;
 }

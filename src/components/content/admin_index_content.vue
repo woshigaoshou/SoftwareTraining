@@ -128,7 +128,6 @@
         </el-form-item>
 
         <el-form-item label="指派专家:" label-width="100px" class="appoint">
-
           <el-dropdown @command="handleCommand" trigger="click" placement="bottom-start">
             <span class="el-dropdown-link" v-if="chooseExpert == ''">
               专家列表
@@ -281,10 +280,12 @@
                   >
                     <el-button size="mini" type="primary">预览</el-button>
                   </el-link>
-                  <el-button type="primary" size="mini" 
+                  <el-button
+                    type="primary"
+                    size="mini"
                     style="margin-left:10px"
-                    @click="download(scope.row)">
-                      下载</el-button>
+                    @click="download(scope.row)"
+                  >下载</el-button>
                   <el-popconfirm
                     confirmButtonText="确认"
                     cancelButtonText="不了"
@@ -396,29 +397,28 @@ export default {
       }
       // console.log(data);
       findmReport(data).then(res => {
-        if(res.data.length === 0) {
-          alert('该项目未提交中期报告或输入信息错误')
-        }else {
+        if (res.data.length === 0) {
+          alert("该项目未提交中期报告或输入信息错误");
+        } else {
           let tmp = null;
-        console.log(res);
-        this.tempList = [];
-        res.data.forEach(item => {
-          tmp = item;
-          // console.log(tmp);
-          tmp.userId = item.mreport.userId;
-          tmp.projectId = item.mreport.projectId;
-          tmp.mreport = 1;
-          tmp.oneId = item.teacherName;
-          this.collegeList.forEach(item => {
-            if (item.name === tmp.collegeName) {
-              tmp.collegeId = item.id;
-            }
+          console.log(res);
+          this.tempList = [];
+          res.data.forEach(item => {
+            tmp = item;
+            // console.log(tmp);
+            tmp.userId = item.mreport.userId;
+            tmp.projectId = item.mreport.projectId;
+            tmp.mreport = 1;
+            tmp.oneId = item.teacherName;
+            this.collegeList.forEach(item => {
+              if (item.name === tmp.collegeName) {
+                tmp.collegeId = item.id;
+              }
+            });
+            this.tempList.push(item);
           });
-          this.tempList.push(item);
-        });
-        console.log(this.tempList);
+          console.log(this.tempList);
         }
-        
       });
     });
   },
@@ -721,27 +721,23 @@ export default {
     },
     //单个指派
     setExpert(row) {
-      
       // console.log(row);
       request({
         url: "http://47.113.80.250:9003/report/select/" + row.projectId,
         method: "get"
       }).then(res => {
-
         console.log(res);
-        if(res.code !== 200) {
+        if (res.code !== 200) {
           alert(res.message);
-        }else if(res.code === 200) {
-          if(res.data.mreport.expert !== "") {
-          alert('该项目已指派专家')
-        }else{
-        this.setReportId = res.data.mreport.reportId;
-        this.setExpertPid.push(this.setReportId);
-        this.isShow = true;
+        } else if (res.code === 200) {
+          if (res.data.mreport.expert !== "") {
+            alert("该项目已指派专家");
+          } else {
+            this.setReportId = res.data.mreport.reportId;
+            this.setExpertPid.push(this.setReportId);
+            this.isShow = true;
+          }
         }
-        }
-        
-        
 
         // console.log(this.setReportId);
         // console.log(this.setExpertPid);
@@ -824,18 +820,18 @@ export default {
         });
         this.appointedForm = false;
       }
-
-        //中期报告文件下载
+    },
+    //中期报告文件下载
     download(row) {
       request({
-        url:'http://47.113.80.250:9002/download',
-        data:{
-          fileUrl:row.furl,
-          fileName:row.fname
+        url: "http://47.113.80.250:9002/download",
+        data: {
+          fileUrl: row.furl,
+          fileName: row.fname
         },
-        method:'POST'
+        method: "POST"
       }).then(res => {
-       const content = res;
+        const content = res;
         const blob = new Blob([content]);
         const fileName = row.fname; //下载文件名称
         const elink = document.createElement("a");
@@ -846,14 +842,13 @@ export default {
         elink.click();
         URL.revokeObjectURL(elink.href); // 释放URL 对象
         document.body.removeChild(elink);
-      })
-
+      });
     }
   }
 };
 </script>
 
-<style>
+<style scoped>
 .eTable {
   position: absolute;
   top: 160px;
@@ -959,10 +954,7 @@ export default {
   margin-bottom: 10px;
 }
 
-
 .appoint span {
-
-
   color: darkslategray;
 }
 .sumApp {

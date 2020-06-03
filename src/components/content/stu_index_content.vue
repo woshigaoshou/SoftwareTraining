@@ -1,119 +1,91 @@
 <template>
-
-    <div class="content-view">
-        <!--表格-->
-        <el-table
-          border
-          :data="tempList"
-          style="width: 100%"
-          @expand-change="handleMange" 
-          >
-          <el-table-column type="expand" >
-           <template slot-scope="props" >
-              <el-form label-position="left" inline class="table-expand">
-                      <el-form-item label="项目ID:">
-                        <span>{{ props.row.projectId }}</span>
-                      </el-form-item>
-                      <el-form-item label="项目名称:">
-                        <span>{{ props.row.projectName }}</span>
-                      </el-form-item>
-                      <el-form-item label="负责人:">
-                        <span>{{ userInfo.userName }}</span>
-                      </el-form-item>
-                      <el-form-item label="学号:">
-                        <span>{{ props.row.userId }}</span>
-                      </el-form-item>
-                      <el-form-item label="联系方式:">
-                        <span>{{ userInfo.userPhone }}</span>
-                      </el-form-item>
-                      <el-form-item label="项目等级:">
-                        <span v-if="props.row.grade === 1">校级</span> 
-                        <span v-if="props.row.grade === 2">省级</span> 
-                        <span v-if="props.row.grade === 3">国家级</span> 
-                        <span v-if="props.row.grade === 0">无</span>
-                      </el-form-item>
-                       <el-form-item label="指导老师1:">
-                        <span v-if="props.row.oneId !== null">{{props.row.oneId}}</span> 
-                        <span v-else>无</span>
-                      </el-form-item>
-                       <el-form-item label="指导老师2:">
-                        <span v-if="props.row.twoId !== null">{{props.row.twoId}}</span> 
-                        <span v-else>无</span>
-                      </el-form-item>
-                      <el-form-item label="立案申请:">
-                        <span v-if="props.row.sreport == 1" style="color:green">已提交</span> 
-                        <span v-else style="color:red">未提交</span>
-                      </el-form-item>
-                      <el-form-item label="中期报告:">
-                         <span v-if="props.row.mreport == 1" style="color:green">已提交</span> 
-                        <span v-else style="color:red">未提交</span>
-                      </el-form-item>
-                      <el-form-item label="结案报告:">
-                         <span v-if="props.row.freport == 1" style="color:green">已提交</span> 
-                          <span v-else style="color:red">未提交</span>
-                      </el-form-item>
-                    </el-form>
+  <div class="content-view">
+    <!--表格-->
+    <el-table border :data="tempList" style="width: 100%" @expand-change="handleMange">
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <el-form label-position="left" inline class="table-expand">
+            <el-form-item label="项目ID:">
+              <span>{{ props.row.projectId }}</span>
+            </el-form-item>
+            <el-form-item label="项目名称:">
+              <span>{{ props.row.projectName }}</span>
+            </el-form-item>
+            <el-form-item label="负责人:">
+              <span>{{ userInfo.userName }}</span>
+            </el-form-item>
+            <el-form-item label="学号:">
+              <span>{{ props.row.userId }}</span>
+            </el-form-item>
+            <el-form-item label="联系方式:">
+              <span>{{ userInfo.userPhone }}</span>
+            </el-form-item>
+            <el-form-item label="项目等级:">
+              <span v-if="props.row.grade === 1">校级</span>
+              <span v-if="props.row.grade === 2">省级</span>
+              <span v-if="props.row.grade === 3">国家级</span>
+              <span v-if="props.row.grade === 0">无</span>
+            </el-form-item>
+            <el-form-item label="指导老师1:">
+              <span v-if="props.row.oneId !== null">{{props.row.oneId}}</span>
+              <span v-else>无</span>
+            </el-form-item>
+            <el-form-item label="指导老师2:">
+              <span v-if="props.row.twoId !== null">{{props.row.twoId}}</span>
+              <span v-else>无</span>
+            </el-form-item>
+            <el-form-item label="立案申请:">
+              <span v-if="props.row.sreport == 1" style="color:green">已提交</span>
+              <span v-else style="color:red">未提交</span>
+            </el-form-item>
+            <el-form-item label="中期报告:">
+              <span v-if="props.row.mreport == 1" style="color:green">已提交</span>
+              <span v-else style="color:red">未提交</span>
+            </el-form-item>
+            <el-form-item label="结案报告:">
+              <span v-if="props.row.freport == 1" style="color:green">已提交</span>
+              <span v-else style="color:red">未提交</span>
+            </el-form-item>
+          </el-form>
+        </template>
+      </el-table-column>
+      <template>
+        <el-table-column label="项目名称" width="283" prop="projectName"></el-table-column>
+        <el-table-column label="项目负责人学号" width="150" prop="userId"></el-table-column>
+        <el-table-column label="所属学院" width="150" prop="collegeId" :formatter="GetCollegeName"></el-table-column>
+        <el-table-column label="项目等级" width="90" align="center">
+          <template slot-scope="scope">
+            <span v-if="scope.row.grade === 1">校级</span>
+            <span v-if="scope.row.grade === 2">省级</span>
+            <span v-if="scope.row.grade === 3">国家级</span>
+            <span v-if="scope.row.grade === 0">无</span>
           </template>
-          </el-table-column>
-          <template>
-          <el-table-column
-            label="项目名称"
-            width="283"
-            prop="projectName"
-            >
-          </el-table-column>
-          <el-table-column
-            label="项目负责人学号"
-            width="150"
-            prop="userId"
-            >
-          </el-table-column>
-          <el-table-column
-            label="所属学院"
-            width="150"
-            prop="collegeId" 
-            :formatter="GetCollegeName"
-            >
-          </el-table-column>
-          <el-table-column
-            label="项目等级"
-            width="90"
-            align="center">
-            <template slot-scope="scope"> 
-                  <span v-if="scope.row.grade === 1">校级</span> 
-                  <span v-if="scope.row.grade === 2">省级</span> 
-                  <span v-if="scope.row.grade === 3">国家级</span> 
-                  <span v-if="scope.row.grade === 0">无</span>
-              </template>
-          </el-table-column>
-          <el-table-column
-            label="中期报告"
-            width="90" align="center">
-              <template slot-scope="scope">
-                  <span v-if="scope.row.mreport == 1" style="color:green">已提交</span> 
-                  <span v-else style="color:red">未提交</span>
-              </template>
-          </el-table-column>
+        </el-table-column>
+        <el-table-column label="中期报告" width="90" align="center">
+          <template slot-scope="scope">
+            <span v-if="scope.row.mreport == 1" style="color:green">已提交</span>
+            <span v-else style="color:red">未提交</span>
           </template>
-          <el-table-column label="中期报告操作" width="150">
-            <template slot-scope="scope">
-              <el-button type="primary" size="small" @click="mReport(scope.$index, scope.row)">查看</el-button>
-              <el-button type="primary" size="small" @click="mReportNew(scope.$index, scope.row)">新建</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <div class="block">
-            <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange" 
-              :current-page.sync="currentPage"
-              :page-sizes="[1, 5, 10, 20]"
-              :page-size="pageSize" 
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="total">
-            </el-pagination>
-       </div>
-
+        </el-table-column>
+      </template>
+      <el-table-column label="中期报告操作" width="150">
+        <template slot-scope="scope">
+          <el-button type="primary" size="small" @click="mReport(scope.$index, scope.row)">查看</el-button>
+          <el-button type="primary" size="small" @click="mReportNew(scope.$index, scope.row)">新建</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <div class="block">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage"
+        :page-sizes="[1, 5, 10, 20]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      ></el-pagination>
+    </div>
 
     <el-dialog
       v-model="dialogFormVisibleNew"
@@ -161,46 +133,45 @@
             </el-form>
           </el-form-item>
 
-          <el-form-item label="导师评议:" label-width="100px" class="midDisscuss" >
-             <span v-if="midReport.tapproval === 0">未审核</span>
-             <span v-if="midReport.tapproval === 1" style="color:red">不通过</span>
-             <span v-if="midReport.tapproval === 2" style="color:green">已通过</span>
-             <span v-if="midReport.tapproval === 3" style="color:orange">退回修改</span>
+          <el-form-item label="导师评议:" label-width="100px" class="midDisscuss">
+            <span v-if="midReport.tapproval === 0">未审核</span>
+            <span v-if="midReport.tapproval === 1" style="color:red">不通过</span>
+            <span v-if="midReport.tapproval === 2" style="color:green">已通过</span>
+            <span v-if="midReport.tapproval === 3" style="color:orange">退回修改</span>
           </el-form-item>
           <el-form-item label="学院评议:" label-width="100px" class="midDisscuss">
-              <span v-if="midReport.capproval === 0">未审核</span>
-             <span v-if="midReport.capproval === 1" style="color:red">不通过</span>
-             <span v-if="midReport.capproval === 2" style="color:green">已通过</span>
-             <span v-if="midReport.capproval === 3" style="color:orange">退回修改</span>
+            <span v-if="midReport.capproval === 0">未审核</span>
+            <span v-if="midReport.capproval === 1" style="color:red">不通过</span>
+            <span v-if="midReport.capproval === 2" style="color:green">已通过</span>
+            <span v-if="midReport.capproval === 3" style="color:orange">退回修改</span>
           </el-form-item>
           <el-form-item label="大创管理评议:" label-width="100px" class="midDisscuss">
-              <span v-if="midReport.sapproval === 0">未审核</span>
-             <span v-if="midReport.sapproval === 1" style="color:red">不通过</span>
-             <span v-if="midReport.sapproval === 2" style="color:green">已通过</span>
-             <span v-if="midReport.sapproval === 3" style="color:orange">退回修改</span>
+            <span v-if="midReport.sapproval === 0">未审核</span>
+            <span v-if="midReport.sapproval === 1" style="color:red">不通过</span>
+            <span v-if="midReport.sapproval === 2" style="color:green">已通过</span>
+            <span v-if="midReport.sapproval === 3" style="color:orange">退回修改</span>
           </el-form-item>
-           <el-form-item label="评审专家评议:" label-width="100px" class="midDisscuss">
-              <span v-if="midReport.eapproval === 0">未审核</span>
-             <span v-if="midReport.eapproval === 1" style="color:red">不通过</span>
-             <span v-if="midReport.eapproval === 2" style="color:green">已通过</span>
-             <span v-if="midReport.eapproval === 3" style="color:orange">退回修改</span>
+          <el-form-item label="评审专家评议:" label-width="100px" class="midDisscuss">
+            <span v-if="midReport.eapproval === 0">未审核</span>
+            <span v-if="midReport.eapproval === 1" style="color:red">不通过</span>
+            <span v-if="midReport.eapproval === 2" style="color:green">已通过</span>
+            <span v-if="midReport.eapproval === 3" style="color:orange">退回修改</span>
           </el-form-item>
           <el-form-item label="导师评语:" label-width="100px">
-             <span v-if="midReport.tcomment">{{midReport.tcomment}}</span>
-             <span v-else>无</span>
+            <span v-if="midReport.tcomment">{{midReport.tcomment}}</span>
+            <span v-else>无</span>
           </el-form-item>
-           <el-form-item label="学院评语:" label-width="100px">
-             <span v-if="midReport.ccomment">{{midReport.ccomment}}</span>
-             <span v-else>无</span>
+          <el-form-item label="学院评语:" label-width="100px">
+            <span v-if="midReport.ccomment">{{midReport.ccomment}}</span>
+            <span v-else>无</span>
           </el-form-item>
-           <el-form-item label="大创管理评语:" label-width="100px">
-             <span v-if="midReport.scomment">{{midReport.scomment}}</span>
-             <span v-else>无</span>
+          <el-form-item label="大创管理评语:" label-width="100px">
+            <span v-if="midReport.scomment">{{midReport.scomment}}</span>
+            <span v-else>无</span>
           </el-form-item>
-           <el-form-item label="评审专家评语:" label-width="100px">
-             <span v-if="midReport.ecomment">{{midReport.ecomment}}</span>
-             <span v-else>无</span>
-
+          <el-form-item label="评审专家评语:" label-width="100px">
+            <span v-if="midReport.ecomment">{{midReport.ecomment}}</span>
+            <span v-else>无</span>
           </el-form-item>
           <el-form-item
             label="上传文件:"
@@ -243,11 +214,13 @@
                   >
                     <el-button size="mini" type="primary">预览</el-button>
                   </el-link>
-                    <el-button type="primary" size="mini" 
+                  <el-button
+                    type="primary"
+                    size="mini"
                     style="margin-left:10px"
-                    @click="download(scope.row)">
-                      下载</el-button>
-                  
+                    @click="download(scope.row)"
+                  >下载</el-button>
+
                   <el-popconfirm
                     confirmButtonText="确认"
                     cancelButtonText="不了"
@@ -276,35 +249,40 @@ import { request } from "../../network/request/request";
 export default {
   data() {
     return {
-
       //项目数据
-      tableData:[],
-      userId : '',
-      dialogFormVisible:false,
-      dialogFormVisibleNew:false,
-      baseUrl:'',
-      userInfo:[],
+      tableData: [],
+      userId: "",
+      dialogFormVisible: false,
+      dialogFormVisibleNew: false,
+      baseUrl: "",
+      userInfo: [],
       total: 0,
-      tempList:[],
-      currentPage:1,
-      pageSize:10,
-      midReport:[],
-      midReportNew:[],
-      projectName:'',
-      mfiles:[],
-      content:'',
-      changeContentValue:false,
-      fileShow:false,
-      mfileNewName:'',
-      mfileForm:new FormData(),
-      collegeList:[
-        {id:1,name:'计算机科学与工程学院'},{id:2,name:'政法学院'},{id:3,name:'电子信息与电气工程学院'},
-        {id:4,name:'地理与旅游学院'},{id:5,name:'数学与大数据学院'},{id:6,name:'化学与材料工程学院'},
-        {id:7,name:'建筑与土木工程学院'},{id:8,name:'旭日广东服装学院'},{id:9,name:'生命科学学院'},
-        {id:10,name:'经济管理学院'},{id:11,name:'体育学院'}
-      ],
-    }
-
+      tempList: [],
+      currentPage: 1,
+      pageSize: 10,
+      midReport: [],
+      midReportNew: [],
+      projectName: "",
+      mfiles: [],
+      content: "",
+      changeContentValue: false,
+      fileShow: false,
+      mfileNewName: "",
+      mfileForm: new FormData(),
+      collegeList: [
+        { id: 1, name: "计算机科学与工程学院" },
+        { id: 2, name: "政法学院" },
+        { id: 3, name: "电子信息与电气工程学院" },
+        { id: 4, name: "地理与旅游学院" },
+        { id: 5, name: "数学与大数据学院" },
+        { id: 6, name: "化学与材料工程学院" },
+        { id: 7, name: "建筑与土木工程学院" },
+        { id: 8, name: "旭日广东服装学院" },
+        { id: 9, name: "生命科学学院" },
+        { id: 10, name: "经济管理学院" },
+        { id: 11, name: "体育学院" }
+      ]
+    };
   },
   created() {
     this.initData();
@@ -326,19 +304,17 @@ export default {
 
         this.total = this.tableData.length;
         // console.log(this.count);
-        this.tempList = this.tableData
-        return this.tempList   
-        })
-
+        this.tempList = this.tableData;
+        return this.tempList;
+      });
     },
 
     //获取所属二级学院名称
     GetCollegeName(row) {
       console.log(row.collegeId);
-      
-      for(let i in this.collegeList) {
-        if(row.collegeId === this.collegeList[i].id)
-        {
+
+      for (let i in this.collegeList) {
+        if (row.collegeId === this.collegeList[i].id) {
           return this.collegeList[i].name;
         }
       }
@@ -364,32 +340,30 @@ export default {
     },
     //分页设置
 
-     handleSizeChange(pageSize) {
-        this.pageSize = pageSize
-        this.handleCurrentChange(this.currentPage);
-      },
-      handleCurrentChange(currentPage) {
-       this.currentPage1 = currentPage
-      this.currentChangePage(this.tableData,currentPage)
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize;
+      this.handleCurrentChange(this.currentPage);
+    },
+    handleCurrentChange(currentPage) {
+      this.currentPage1 = currentPage;
+      this.currentChangePage(this.tableData, currentPage);
       console.log(this.tableData);
-      
-      },
-      currentChangePage(list,currentPage) { 
-        // console.log(list);
-        // console.log(currentPage);
-        
-          let from = (currentPage - 1) * this.pageSize;
-          let to = currentPage * this.pageSize;
-          this.tempList = [];
-          for (; from < to; from++) {
-           if (list[from]) {
-            this.tempList.push(list[from]);
-           }
-          }
-          // console.log(this.tempList);
-          // this.tableData = this.tempList
-          
-       },
+    },
+    currentChangePage(list, currentPage) {
+      // console.log(list);
+      // console.log(currentPage);
+
+      let from = (currentPage - 1) * this.pageSize;
+      let to = currentPage * this.pageSize;
+      this.tempList = [];
+      for (; from < to; from++) {
+        if (list[from]) {
+          this.tempList.push(list[from]);
+        }
+      }
+      // console.log(this.tempList);
+      // this.tableData = this.tempList
+    },
 
     //中期报告信息获取
     mReport(index, row) {
@@ -532,14 +506,14 @@ export default {
     //中期报告文件下载
     download(row) {
       request({
-        url:'http://47.113.80.250:9002/download',
-        data:{
-          fileUrl:row.furl,
-          fileName:row.fname
+        url: "http://47.113.80.250:9002/download",
+        data: {
+          fileUrl: row.furl,
+          fileName: row.fname
         },
-        method:'POST'
+        method: "POST"
       }).then(res => {
-       const content = res;
+        const content = res;
         const blob = new Blob([content]);
         const fileName = row.fname; //下载文件名称
         const elink = document.createElement("a");
@@ -550,14 +524,13 @@ export default {
         elink.click();
         URL.revokeObjectURL(elink.href); // 释放URL 对象
         document.body.removeChild(elink);
-      })
-      
+      });
     }
   }
 };
 </script>
 
-<style>
+<style scoped>
 .table-expand {
   font-size: 0;
 }

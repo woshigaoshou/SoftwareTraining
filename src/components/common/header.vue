@@ -6,7 +6,6 @@
       </div>
 
       <div class="header-search" v-show="isShow">
-
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
           <el-form-item>
             <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -41,7 +40,6 @@
 
     <find v-show="showFind" class="find"></find>
     <div class="login-bg" v-show="showFind"></div>
-
   </div>
 </template>
 
@@ -50,7 +48,6 @@ import { CHANGE_LOGOUT } from "../../store/mutation-types";
 import { request } from "../../network/request/request";
 
 import find from "./find";
-
 
 export default {
   data() {
@@ -93,7 +90,6 @@ export default {
 
       // this.$bus.$emit("find", this.formInline.content);
       this.showFind = true;
-
     },
     logout() {
       // console.log(this.$store.state.loginForm.userID);
@@ -114,7 +110,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 header {
   background-color: #292a2a;
   height: 80px;
@@ -192,5 +188,4 @@ header {
   background: rgba(0, 0, 0, 0.6);
   z-index: 999;
 }
-
 </style>

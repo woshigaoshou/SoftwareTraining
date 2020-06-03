@@ -189,10 +189,12 @@
                   >
                     <el-button size="mini" type="primary">预览</el-button>
                   </el-link>
-                  <el-button type="primary" size="mini" 
+                  <el-button
+                    type="primary"
+                    size="mini"
                     style="margin-left:10px"
-                    @click="download(scope.row)">
-                      下载</el-button>
+                    @click="download(scope.row)"
+                  >下载</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -427,17 +429,17 @@ export default {
         this.dialogFormVisibleNew = false;
       });
     },
-        //中期报告文件下载
+    //中期报告文件下载
     download(row) {
       request({
-        url:'http://47.113.80.250:9002/download',
-        data:{
-          fileUrl:row.furl,
-          fileName:row.fname
+        url: "http://47.113.80.250:9002/download",
+        data: {
+          fileUrl: row.furl,
+          fileName: row.fname
         },
-        method:'POST'
+        method: "POST"
       }).then(res => {
-       const content = res;
+        const content = res;
         const blob = new Blob([content]);
         const fileName = row.fname; //下载文件名称
         const elink = document.createElement("a");
@@ -448,13 +450,13 @@ export default {
         elink.click();
         URL.revokeObjectURL(elink.href); // 释放URL 对象
         document.body.removeChild(elink);
-      })
+      });
     }
   }
 };
 </script>
 
-<style>
+<style scoped>
 .table-expand {
   font-size: 0;
 }

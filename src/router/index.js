@@ -91,30 +91,30 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  // console.log(to.path);
-  // console.log(next);
-  if (to.path === '/login') {
-    let token = localStorage.getItem('Authorization');
-    if (token === '' || token === null) {
-      next();
-    } else {
-      store.commit(CHECK_TOKEN)
-      // let identity_ids = ["/index", "/Teacher", "/CollegeAdmin", "/Admin", "/Expert"];
-      // if (identity_ids[localStorage.getItem('iid') - 1] !== to.path) {
-      //   alert("用户权限不足，无法访问该页面！")
-      // }
-      // next(identity_ids[localStorage.getItem('iid') - 1]);
+  let token = localStorage.getItem('Authorization');
+  const identity_ids = [
+    "/index",
+    "/teacherContent",
+    "/collegeAdminContent",
+    "/adminContent",
+    "/expertContent"
+  ]
+  let id = localStorage.getItem('iid')
+  if (token) {
+    if (to.path === '/login') {
+      next(identity_ids[id - 1])
+    }
+    else {
       next()
-
     }
   } else {
-    store.commit(CHECK_TOKEN)
-    // let identity_ids = ["/index", "/Teacher", "/CollegeAdmin", "/Admin", "/Expert"];
-    // if (identity_ids[localStorage.getItem('iid') - 1] !== to.path) {
-    //   alert("用户权限不足，无法访问该页面！")
-    // }
-    // next(identity_ids[localStorage.getItem('iid') - 1]);
-    next()
+    if (to.path !== '/login') {
+      alert('登录已失效，请重新登录');
+      next('/login');
+    }
+    else {
+      next();
+    }
   }
 })
 
