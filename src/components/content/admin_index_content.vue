@@ -104,7 +104,7 @@
       title="中期报告专家指派"
     >
       <el-form style="margin:0">
-        <el-form-item label="可指派列表:" label-width="120px" style="width:170%">
+        <el-form-item label="可指派列表:" label-width="120px" style="width:102%">
           <el-table
             :data="appointList"
             ref="appointList"
@@ -115,7 +115,7 @@
           >
             <el-table-column type="selection"></el-table-column>
 
-            <el-table-column prop="projectName" label="文件名"></el-table-column>
+            <el-table-column prop="projectName" label="文件名" width="280"></el-table-column>
             <el-table-column label="负责人" width="80" prop="userName"></el-table-column>
             <el-table-column label="指导老师" width="80" prop="teacherName"></el-table-column>
             <el-table-column label="中期报告" width="100">
@@ -239,7 +239,7 @@
             <span v-if="midReport.ecomment">{{midReport.ecomment}}</span>
             <span v-else>无</span>
           </el-form-item>
-          <el-form-item
+          <!-- <el-form-item
             label="上传文件:"
             label-width="100px"
             enctype="multipart/form-data"
@@ -267,7 +267,7 @@
                 style="font-size:12px;color:#ccc;margin:0"
               >{{ mfileNewName }}</p>
             </el-upload>
-          </el-form-item>
+          </el-form-item>-->
           <el-form-item label="文件列表:" label-width="100px" style="width:90%">
             <el-table :data="mfiles" height="250" border style="width: 100%;font-size:12px">
               <el-table-column prop="fname" label="文件名" width="210"></el-table-column>
@@ -730,13 +730,13 @@ export default {
         if (res.code !== 200) {
           alert(res.message);
         } else if (res.code === 200) {
-          if (res.data.mreport.expert !== "") {
-            alert("该项目已指派专家");
-          } else {
-            this.setReportId = res.data.mreport.reportId;
-            this.setExpertPid.push(this.setReportId);
-            this.isShow = true;
-          }
+          // if (res.data.mreport.expert !== "") {
+          //   alert("该项目已指派专家");
+          // } else {
+          this.setReportId = res.data.mreport.reportId;
+          this.setExpertPid.push(this.setReportId);
+          this.isShow = true;
+          // }
         }
 
         // console.log(this.setReportId);

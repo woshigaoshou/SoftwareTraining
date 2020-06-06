@@ -1,26 +1,28 @@
 <template>
-  <div>
-    <el-form label-width="100px">
-      <p>大创账号登录</p>
-      <el-form-item label="账号" prop="pass">
-        <el-input type="input" v-model="loginForm.userID" placeholder="请输入账号"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="pass">
-        <el-input type="password" v-model="loginForm.userPsw" placeholder="请输入密码"></el-input>
-      </el-form-item>
-      <el-form-item label="验证码" prop="pass" id="identParent">
-        <el-input
-          type="input"
-          v-model="loginForm.randString"
-          placeholder="请输入验证码"
-          class="randString"
-        ></el-input>
-        <img :src="imgsrc" id="ident" @click="createImg" />
-      </el-form-item>
-      <el-form-item class="btn">
-        <el-button type="primary" @click="submit">登录</el-button>
-      </el-form-item>
-    </el-form>
+  <div class="login">
+    <div>
+      <el-form label-width="100px">
+        <p>大创账号登录</p>
+        <el-form-item label="账号" prop="pass">
+          <el-input type="input" v-model="loginForm.userID" placeholder="请输入账号"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="pass">
+          <el-input type="password" v-model="loginForm.userPsw" placeholder="请输入密码"></el-input>
+        </el-form-item>
+        <el-form-item label="验证码" prop="pass" id="identParent">
+          <el-input
+            type="input"
+            v-model="loginForm.randString"
+            placeholder="请输入验证码"
+            class="randString"
+          ></el-input>
+          <img :src="imgsrc" id="ident" @click="createImg" />
+        </el-form-item>
+        <el-form-item class="btn">
+          <el-button type="primary" @click="submit">登录</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 
@@ -99,12 +101,18 @@ export default {
 };
 </script>
 <style scoped>
+.login {
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+  background-image: url("../../assets/img/background.jpg");
+}
 .randString .el-input__inner {
   width: 100% !important;
 }
 form {
   width: 350px;
-  margin-top: 180px;
+  padding-top: 180px;
   margin-left: 520px;
 }
 .btn {

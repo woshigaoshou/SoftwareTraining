@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form ref="form" :model="form" label-width="80px">
+    <el-form ref="form" :model="form" label-width="100px" class="stuform">
       <el-form-item label="专家id">
         <el-input v-model="form.expert" placeholder="please input"></el-input>
       </el-form-item>
@@ -80,6 +80,16 @@ export default {
   width: 87% !important;
 }
 .btn {
-  margin-left: 9px;
+  margin-left: 35px;
+}
+.stuform {
+  width: 400px !important;
+  position: relative;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  padding-left: 15px;
+  background-color: rgb(163, 207, 218);
+  z-index: 9999999;
+  border-radius: 15px;
 }
 </style>

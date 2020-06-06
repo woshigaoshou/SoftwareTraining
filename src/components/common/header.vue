@@ -2,7 +2,7 @@
   <div>
     <header>
       <div class="header-title" onclick="window.location.href = 'index.html'">
-        <strong>大创中期检查系统</strong>
+        <strong class="title">大创中期检查系统</strong>
       </div>
 
       <div class="header-search" v-show="isShow">
@@ -111,6 +111,10 @@ export default {
 </script>
 
 <style scoped>
+.title {
+  z-index: 999;
+  color: rgba(255, 255, 255, 0.9);
+}
 header {
   background-color: #292a2a;
   height: 80px;
@@ -164,18 +168,16 @@ header {
 
 .find {
   position: absolute;
-  top: -75px;
-  left: 20px;
-
-  z-index: 9999;
+  top: 25px;
+  left: 550px;
+  z-index: 999;
 }
-.find form {
+.find .el-form {
   width: 400px !important;
   position: relative;
-  padding: 30px;
   padding-left: 15px;
   background-color: rgb(163, 207, 218);
-  z-index: 9999;
+  z-index: 9999999;
   border-radius: 15px;
 }
 .login-bg {
@@ -186,6 +188,6 @@ header {
   top: 0px;
   left: 0px;
   background: rgba(0, 0, 0, 0.6);
-  z-index: 999;
+  z-index: 99;
 }
 </style>
