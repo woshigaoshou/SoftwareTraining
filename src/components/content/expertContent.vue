@@ -158,6 +158,10 @@
             <span v-if="midReport.sapproval === 2" style="color:green">已通过</span>
             <span v-if="midReport.sapproval === 3" style="color:orange">退回修改</span>
           </el-form-item>
+          <el-form-item label="评审专家:" label-width="100px">
+            <span v-if="midReport.expertName">{{midReport.expertName}}</span>
+            <span v-else>无</span>
+          </el-form-item>
           <el-form-item label="评审专家评议:" label-width="100px" class="midDisscuss">
             <span v-if="midReport.eapproval === 0">未审核</span>
             <span v-if="midReport.eapproval === 1" style="color:red">不通过</span>
@@ -347,6 +351,9 @@ export default {
             this.midReport = res.data.mreport;
             this.mfiles = res.data.mfiles;
             this.content = res.data.mreport.content;
+            this.midReport.expertName = res.data.expertName;
+            console.log(this);
+
             return res.code;
           } else {
             alert(res.message);

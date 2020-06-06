@@ -176,6 +176,10 @@
           <el-form-item label="大创管理评语:" label-width="100px">
             <span>{{midReport.scomment}}</span>
           </el-form-item>
+          <el-form-item label="评审专家:" label-width="100px">
+            <span v-if="midReport.expertName">{{midReport.expertName}}</span>
+            <span v-else>无</span>
+          </el-form-item>
           <el-form-item label="评审专家评语:" label-width="100px">
             <span>{{midReport.ecomment}}</span>
           </el-form-item>
@@ -384,6 +388,8 @@ export default {
             this.midReport = res.data.mreport;
             this.mfiles = res.data.mfiles;
             this.content = res.data.mreport.content;
+            this.midReport.expertName = res.data.expertName;
+
             return res.code;
           } else {
             alert(res.message);

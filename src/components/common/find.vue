@@ -58,6 +58,10 @@ export default {
       this.$bus.$emit("close");
       // console.log(this.form);
       this.$bus.$emit("find", this.form);
+      let formData = this.form;
+      for (let k in formData) {
+        formData[k] = "";
+      }
     },
     close() {
       this.$bus.$emit("close");

@@ -8,7 +8,7 @@
       <div class="header-search" v-show="isShow">
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
           <el-form-item>
-            <el-button type="primary" @click="onSubmit">查询</el-button>
+            <el-button type="primary" @click="onSubmit" v-if="identityId>=3 && identityId<5">查询</el-button>
           </el-form-item>
         </el-form>
       </div>

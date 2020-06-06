@@ -169,6 +169,10 @@
             <span v-if="midReport.scomment">{{midReport.scomment}}</span>
             <span v-else>无</span>
           </el-form-item>
+          <el-form-item label="评审专家:" label-width="100px">
+            <span v-if="midReport.expertName">{{midReport.expertName}}</span>
+            <span v-else>无</span>
+          </el-form-item>
           <el-form-item label="评审专家评语:" label-width="100px">
             <span v-if="midReport.ecomment">{{midReport.ecomment}}</span>
             <span v-else>无</span>
@@ -374,11 +378,16 @@ export default {
       })
         .then(res => {
           console.log(res);
+          console.log("1111");
+
           if (res.code === 200) {
             this.projectName = row.projectName;
             this.midReport = res.data.mreport;
             this.mfiles = res.data.mfiles;
             this.content = res.data.mreport.content;
+            this.midReport.expertName = res.data.expertName;
+            console.log(this);
+
             return res.code;
           } else {
             alert(res.message);
