@@ -447,7 +447,8 @@ export default {
           fileUrl: row.furl,
           fileName: row.fname
         },
-        method: "POST"
+        method: "POST",
+        responseType: "blob"
       }).then(res => {
         const content = res;
         const blob = new Blob([content]);
